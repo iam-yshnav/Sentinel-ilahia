@@ -1,0 +1,51 @@
+from flask import render_template, request, redirect, url_for, flash
+from werkzeug.utils import secure_filename
+import os
+
+from app import db
+from app.models import ThreatReport
+from app.main import main_bp
+
+@main_bp.route('/')
+def home():
+    return render_template('report.html')
+
+@main_bp.route('/submit-threat', methods=['POST'])
+def submit_threat():
+    # Extract form data
+    threat_title = request.form.get('threat_title')
+    summary = request.form.get('summary')
+    iocs = request.form.get('iocs', 'None provided')
+    affected_platforms = request.form.get('affected_platforms', 'None specified')
+    detailed_description = request.form.get('detailed_description')
+    impact_type = request.form.get('impact_type')
+    severity_level = request.form.get('severity_level')
+    mitigation_actions = request.form.get('mitigation_actions', 'No actions taken yet')
+
+    # Handle file upload
+    attachment = request.files.get('attachment')
+    attachment_path = None
+    if attachment and attachment.filename != '':
+        filename = secure_filename(attachment.filename)
+        attachment_path = os.path.join(main_bp.root_path, '..', '..', 'uploads', filename)
+        attachment.save(attachment_path)
+
+    # Create a new ThreatReport record
+    threat_report = ThreatReport(
+        threat_title=threat_title,
+        summary=summary,
+        iocs=iocs,
+        affected_platforms=affected_platforms,
+        detailed_description=detailed_description,
+        impact_type=impact_type,
+        severity_level=severity_level,
+        mitigation_actions=mitigation_actions,
+        attachment_path=attachment_path
+    )
+
+    db.session.add(threat_report) #TODO: Capture on fail, add exceptions
+    db.session.commit()
+
+    # Flash a success message
+    flash("Threat report submitted successfully!", "success") # TODO: Implement python logger gere
+    return redirect(url_for('main_bp.home'))

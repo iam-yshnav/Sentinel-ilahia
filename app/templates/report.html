@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Threat Submission Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1>Threat Submission Portal</h1>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="layout">
+            <!-- Left Panel -->
+            <aside class="left-panel">
+                <section class="instructions">
+                    <h3>Quick Guide to Threat Submission</h3>
+                    <ul>
+                        <li><strong>Title:</strong> Give a clear, concise threat title.</li>
+                        <li><strong>Summary:</strong> Briefly explain the threat's nature.</li>
+                        <li><strong>IOCs:</strong> List key indicators (IPs, domains, etc.).</li>
+                        <li><strong>Platforms:</strong> Specify impacted systems or apps.</li>
+                        <li><strong>Details:</strong> Provide an in-depth description.</li>
+                        <li><strong>Severity:</strong> Rate the threat's impact.</li>
+                        <li><strong>Attach Evidence:</strong> Optional, but helpful for analysis.</li>
+                    </ul>
+                </section>
+                
+            </aside>
+
+            <!-- Right Panel -->
+            <div class="form-card">
+                <h2>Submit a Threat</h2>
+                <form action="/submit-threat" method="POST" enctype="multipart/form-data" class="submission-form">
+                    <div class="form-group">
+                        <label for="threat_title">Threat Title</label>
+                        <input type="text" id="threat_title" name="threat_title" placeholder="Enter threat title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="summary">Summary/Overview</label>
+                        <textarea id="summary" name="summary" rows="4" placeholder="Provide a brief summary" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="iocs">Indicators of Compromise (IOCs)</label>
+                        <textarea id="iocs" name="iocs" rows="4" placeholder="List IOCs (e.g., IPs, domains, file hashes)" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="affected_platforms">Affected Platforms</label>
+                        <input type="text" id="affected_platforms" name="affected_platforms" placeholder="Specify affected OS or applications" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="detailed_description">Detailed Description</label>
+                        <textarea id="detailed_description" name="detailed_description" rows="6" placeholder="Provide a detailed description of the threat" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="impact_type">Impact Type</label>
+                        <input type="text" id="impact_type" name="impact_type" placeholder="Type of impact (e.g., data breach)" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="severity_level">Severity Level</label>
+                        <select id="severity_level" name="severity_level" required>
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                            <option value="critical">Critical</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="mitigation_actions">Mitigation Actions Taken</label>
+                        <textarea id="mitigation_actions" name="mitigation_actions" rows="3" placeholder="Describe mitigation actions taken" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="attachment">Supporting Evidence (Optional)</label>
+                        <input type="file" id="attachment" name="attachment" accept=".png, .jpg, .jpeg, .pdf">
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn-submit">Submit</button>
+                        <button type="reset" class="btn-reset">Reset</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Providing accurate details helps us mitigate threats effectively.</p>
+    </footer>
+</body>
+</html>
