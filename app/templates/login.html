@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Threat Submission Portal - Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1>Threat Submission Portal</h1>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="layout">
+            <!-- Left Panel -->
+            <aside class="left-panel">
+                <section class="instructions">
+                    <h3>Welcome Back</h3>
+                    <ul>
+                        <li><strong>Submit Threats:</strong> Access your account to submit new threats.</li>
+                        <li><strong>View Submissions:</strong> Review and update your previous threat submissions.</li>
+                        <li><strong>Collaborate:</strong> Work with other security analysts on critical threats.</li>
+                        <li><strong>Stay Informed:</strong> Keep track of emerging threats and notifications.</li>
+                    </ul>
+                </section>
+            </aside>
+
+            <!-- Right Panel -->
+            <div class="form-card">
+                <h2>Login</h2>
+                <form action="/login" method="POST" class="submission-form">
+                    <div class="form-group">
+                        <label for="username">Username or Email</label>
+                        <input 
+                            type="text"
+                            id="username"
+                            name="username"
+                            placeholder="Enter your username or email"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-submit">Login</button>
+                        <button type="reset" class="btn-reset">Clear</button>
+                    </div>
+                </form>
+
+                <p class="helper-text">
+                    Don't have an account? <a href="/auth/register">Create one here</a>.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Secure your environment by staying informed and collaborating effectively.</p>
+    </footer>
+</body>
+</html>

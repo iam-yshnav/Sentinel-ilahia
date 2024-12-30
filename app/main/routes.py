@@ -1,10 +1,22 @@
-from flask import render_template, request, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for, flash, jsonify
 from werkzeug.utils import secure_filename
+from functools import wraps
+from app.models import User
 import os
 
 from app import db
 from app.models import ThreatReport
 from app.main import main_bp
+
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        token = request.headers.get('Authorization', '').replace("Bearer ", "")
+        user = User.query.filter_by(token=token).first()
+        if not user or user.role != 'admin':
+            return jsonify({"error": "Admin privileges required"}), 403
+        return f(*args, **kwargs)
+    return decorated_function
 
 @main_bp.route('/')
 def home():

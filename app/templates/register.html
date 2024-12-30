@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Threat Submission Portal - Register</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1>Threat Submission Portal</h1>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="layout">
+            <!-- Left Panel -->
+            <aside class="left-panel">
+                <section class="instructions">
+                    <h3>Why Register?</h3>
+                    <ul>
+                        <li><strong>Access to Portal:</strong> Submit new threats and view existing submissions.</li>
+                        <li><strong>Collaboration:</strong> Collaborate with other analysts effectively.</li>
+                        <li><strong>Updates:</strong> Receive notifications on important threat intelligence.</li>
+                        <li><strong>Security:</strong> Protect your environment with real-time IOCs.</li>
+                    </ul>
+                </section>
+            </aside>
+
+            <!-- Right Panel -->
+            <div class="form-card">
+                <h2>Create an Account</h2>
+                <form action="/register" method="POST" class="submission-form">
+                    <div class="form-group">
+                        <label for="first_name">First Name</label>
+                        <input 
+                            type="text"
+                            id="first_name"
+                            name="first_name"
+                            placeholder="Enter your first name"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="last_name">Last Name</label>
+                        <input 
+                            type="text"
+                            id="last_name"
+                            name="last_name"
+                            placeholder="Enter your last name"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="Enter your email"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            placeholder="Choose a username"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Create a password"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirm_password">Confirm Password</label>
+                        <input
+                            type="password"
+                            id="confirm_password"
+                            name="confirm_password"
+                            placeholder="Confirm your password"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-submit">Register</button>
+                        <button type="reset" class="btn-reset">Clear</button>
+                    </div>
+                </form>
+                <p class="helper-text">
+                    Already have an account? <a href="/login">Login here</a>.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Join our community and help build safer cyber environments.</p>
+    </footer>
+</body>
+</html>
