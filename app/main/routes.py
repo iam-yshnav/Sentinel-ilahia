@@ -22,6 +22,11 @@ def admin_required(f):
 def home():
     return render_template('report.html')
 
+@main_bp.route('/new_path', methods=['GET'])
+def another_path():
+    all_threats = db.engine.execute('SELECT * FROM threats')
+    return all_threats
+
 @main_bp.route('/submit-threat', methods=['POST'])
 def submit_threat():
     # Extract form data
@@ -56,8 +61,9 @@ def submit_threat():
     )
 
     db.session.add(threat_report) #TODO: Capture on fail, add exceptions
-    db.session.commit()
+    db.session.commit() # Adding to DB with help of ORM
 
     # Flash a success message
-    flash("Threat report submitted successfully!", "success") # TODO: Implement python logger gere
-    return redirect(url_for('main_bp.home'))
+    flash("Threat report submitted successfully!", "success") # TODO: Implement python logger 
+    # Just returns theat was submited
+    return redirect(url_for('main_bp.home')) # Return to this page

@@ -13,3 +13,10 @@ The project is an adaptation of threat intelligence on collaborative efforts wit
 now run the application with
 
 `python run.py`
+
+
+
+Threats                          Organization                                       Org-affteted
+
+Ubuntu 24.04                      Deloitte - Srv 1 - Ubuntu 18
+                                  Dell - Srv 2 - Ubutuntu 24.04                   Dell Srv2 is affected

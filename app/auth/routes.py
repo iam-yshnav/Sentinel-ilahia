@@ -81,6 +81,6 @@ def logout():
         return jsonify({"error": "Invalid token"}), 401
 
     # Invalidate the token
-    user.token = None
+    user.token = None  
     db.session.commit()
     return jsonify({"message": "Logged out successfully"})
