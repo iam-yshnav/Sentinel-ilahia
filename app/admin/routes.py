@@ -2,7 +2,7 @@ from flask import Blueprint, render_template
 
 admin_bp = Blueprint('admin', __name__)
 
-@admin_bp.route('/')
+@admin_bp.route('/') # Yet to implement the admin access stuff 
 def admin_dashboard():
     return render_template('admin.html')
 

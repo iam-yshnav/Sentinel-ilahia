@@ -2,6 +2,7 @@ from flask import render_template, request, redirect, url_for, flash, jsonify
 from werkzeug.utils import secure_filename
 from functools import wraps
 from app.models import User
+from app.models import ThreatReport
 import os
 
 from app import db
@@ -24,8 +25,9 @@ def home():
 
 @main_bp.route('/new_path', methods=['GET'])
 def another_path():
-    all_threats = db.engine.execute('SELECT * FROM threats')
-    return all_threats
+    threats = ThreatReport.query.all()
+    threat_list = [t.as_dict() for t in threats]
+    return jsonify({'threats': threat_list})
 
 @main_bp.route('/submit-threat', methods=['POST'])
 def submit_threat():
