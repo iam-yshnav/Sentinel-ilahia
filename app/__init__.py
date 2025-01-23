@@ -22,9 +22,11 @@ def  create_app():
     from app.main.routes import main_bp
     from app.auth.routes import auth_bp
     from app.admin.routes import admin_bp
-    
+    from app.org.routes import org_bp
+
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(admin_bp, url_prefix='/admin')
-
+    app.register_blueprint(org_bp, url_prefix='/org')
+    
     return app

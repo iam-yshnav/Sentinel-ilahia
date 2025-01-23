@@ -23,19 +23,22 @@ def admin_required(f):
 def home():
     return render_template('report.html')
 
-@main_bp.route('/new_path', methods=['GET'])
+@main_bp.route('/all', methods=['GET']) # TODO : Make an API endpoint here
 def another_path():
     threats = ThreatReport.query.all()
-    threat_list = [t.as_dict() for t in threats]
-    return jsonify({'threats': threat_list})
+    return render_template('threats_public_view.html', threats=threats)
 
 @main_bp.route('/submit-threat', methods=['POST'])
 def submit_threat():
     # Extract form data
+    # TODO : Validate the data that are coming up here
     threat_title = request.form.get('threat_title')
     summary = request.form.get('summary')
     iocs = request.form.get('iocs', 'None provided')
     affected_platforms = request.form.get('affected_platforms', 'None specified')
+    affected_platform_ver = request.form.get('affected_platform_ver', 'None specified')
+    affected_service = request.form.get('affected_service', 'None specified')
+    affected_service_ver = request.form.get('affected_service_ver', 'None specified')
     detailed_description = request.form.get('detailed_description')
     impact_type = request.form.get('impact_type')
     severity_level = request.form.get('severity_level')
@@ -56,6 +59,9 @@ def submit_threat():
         iocs=iocs,
         affected_platforms=affected_platforms,
         detailed_description=detailed_description,
+        affected_platform_ver=affected_platform_ver,
+        affected_service=affected_service,
+        affected_service_ver=affected_service_ver,
         impact_type=impact_type,
         severity_level=severity_level,
         mitigation_actions=mitigation_actions,

@@ -39,6 +39,8 @@ class ThreatReport(db.Model):
     iocs = db.Column(db.Text)
     affected_platforms = db.Column(db.Text) # OS Limit to 3 from frontend
     affected_platform_ver = db.Column(db.Text) # Make it string with <,> and versions
+    affected_service = db.Column(db.Text)
+    affected_service_ver = db.Column(db.Text)
     detailed_description = db.Column(db.Text, nullable=False)
     impact_type = db.Column(db.String(50))
     severity_level = db.Column(db.String(50)) # TODO: Restrict from frontend will be fine

@@ -19,3 +19,10 @@ def view_users():
     from app.models import User
     users = User.query.all()
     return render_template('admin.html', users=users)
+
+
+
+@admin_bp.route('/approve_user/', methods=['POST'])
+def approve_user():
+    from app.models import User
+    user_id = request.form.get('user_id')

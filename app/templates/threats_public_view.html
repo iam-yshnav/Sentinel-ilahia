@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Public Threat Reports</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .threat-card { 
+            border: 1px solid #ddd; 
+            margin-bottom: 15px; 
+            padding: 15px; 
+            border-radius: 5px; 
+        }
+        .severity-low { background-color: #e6f3e6; }
+        .severity-medium { background-color: #fff4e6; }
+        .severity-high { background-color: #ffebee; }
+        .severity-critical { background-color: #ffcdd2; }
+    </style>
+</head>
+<body>
+    <h1>Threat Intelligence Reports</h1>
+    {% for threat in threats %}
+    <div class="threat-card severity-{{ threat.severity_level.lower() }}">
+        <h2>{{ threat.threat_title }}</h2>
+        <div class="threat-details">
+            <p><strong>Severity:</strong> {{ threat.severity_level }}</p>
+            <p><strong>Impact Type:</strong> {{ threat.impact_type }}</p>
+            <p><strong>Affected Platforms:</strong> {{ threat.affected_platforms }}</p>
+            <p><strong>Summary:</strong> {{ threat.summary }}</p>
+            <details>
+                <summary>Detailed Description</summary>
+                <p>{{ threat.detailed_description }}</p>
+            </details>
+            <p><strong>IOCs:</strong> {{ threat.iocs or 'No IOCs provided' }}</p>
+            <p><strong>Mitigation Actions:</strong> {{ threat.mitigation_actions }}</p>
+        </div>
+    </div>
+    {% endfor %}
+</body>
+</html>
