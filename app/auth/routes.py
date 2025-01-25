@@ -23,13 +23,14 @@ def register():
             flash("Username already exists. Choose a different one.", "error")
             return redirect(url_for('auth_bp.register'))
 
+        role = 'Pending Approval'
         # Create a normal user
         new_user = User(
             username=username,
-            role='user',  # normal user
             name=name,
             salutation=salutation,
             company=company,
+            role=role,
             designation=designation,
             team=team,
             domain=domain

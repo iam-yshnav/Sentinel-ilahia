@@ -1,15 +1,15 @@
 from flask import request, jsonify
 from app import db
-from models import Organization, User, Asset
+from app.models import Organization, User, Asset
 from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identity
 
 
-from app.main import org_bp
+from app.org import org_bp
 
 # TODO : Add auth stuff
 @org_bp.route('/create', methods=['POST'])
 def create_organiztion():
-    current_user = 'admin'
+    current_user = 'check_admin' 
     data = request.get_json()
 
     new_org = Organization(
