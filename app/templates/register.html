@@ -31,25 +31,14 @@
             <!-- Right Panel -->
             <div class="form-card">
                 <h2>Create an Account</h2>
-                <form action="/register" method="POST" class="submission-form">
+                <form action="/auth/register" method="POST" class="submission-form">
                     <div class="form-group">
-                        <label for="first_name">First Name</label>
+                        <label for="Name">Full Name</label>
                         <input 
                             type="text"
-                            id="first_name"
-                            name="first_name"
+                            id="name"
+                            name="name"
                             placeholder="Enter your first name"
-                            required
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="last_name">Last Name</label>
-                        <input 
-                            type="text"
-                            id="last_name"
-                            name="last_name"
-                            placeholder="Enter your last name"
                             required
                         >
                     </div>
@@ -98,11 +87,65 @@
                         >
                     </div>
 
+                    <div class="form-group">
+                        <label for="salutation"> Salutation</label>
+                        <input
+                            type="text"
+                            id="salutation"
+                            name="salutation"
+                            placeholder="Mr."
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="salutation"> Designation</label>
+                        <input
+                            type="text"
+                            id="designation"
+                            name="designation"
+                            placeholder="Senior Security Manager"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="salutation"> Team</label>
+                        <input
+                            type="text"
+                            id="salutation"
+                            name="salutation"
+                            placeholder="SDE - T"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="salutation"> Domain </label>
+                        <input
+                            type="text"
+                            id="domain"
+                            name="domain"
+                            placeholder="wattlecorp.com"
+                            required
+                        >
+                    </div>
+
+                    <label for="organization">Organization:</label>
+                        <select name="organization" required>
+                            <option value="">-- Select Organization --</option>
+                            {% for org in organizations %}
+                                <option value="{{ org.id }}">{{ org.name }}</option>
+                            {% endfor %}
+                        </select>
                     <div class="form-actions">
                         <button type="submit" class="btn-submit">Register</button>
                         <button type="reset" class="btn-reset">Clear</button>
                     </div>
-                </form>
+                </form> 
+                <!-- TODO : Add * for required -->
+                 <!-- TODO : remove company as it is not used from backend -->
+                  <!-- TODO : Change the order for easiest UX -->
                 <p class="helper-text">
                     Already have an account? <a href="/login">Login here</a>.
                 </p>
