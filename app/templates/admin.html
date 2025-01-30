@@ -4,160 +4,227 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
     <style>
-        * {
+        /* Global Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            display: flex;
+            min-height: 100vh;
+            background-color: #f9f9f9;
             color: #333;
         }
 
-        .container {
-            width: 80%;
-            margin: 30px auto;
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background-color: #2d3436;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+            position: fixed;
+            height: 100%;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
         }
 
-        h1 {
+        .sidebar h2 {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
         }
 
-        table {
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 12px 0;
+            margin: 12px 0;
+            border-radius: 8px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .sidebar a:hover {
+            background-color: #0984e3;
+            transform: scale(1.05);
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            width: calc(100% - 250px);
+            box-sizing: border-box;
+        }
+
+        .header {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            color: #2d3436;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .card h3 {
+            font-size: 22px;
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .card table {
             width: 100%;
             border-collapse: collapse;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        th, td {
-            padding: 12px;
+        .card table th, .card table td {
+            padding: 15px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
+            border: 1px solid #e4e4e4;
+            border-radius: 8px;
         }
 
-        th {
-            background-color: #4CAF50;
+        .card table th {
+            background-color: #0984e3;
             color: white;
         }
 
-        .status {
-            padding: 5px 10px;
-            border-radius: 5px;
+        .card table td {
+            background-color: #f9f9f9;
+        }
+
+        .card table tr:hover {
+            background-color: #e1f5fe;
+        }
+
+        .card table .approve-btn {
+            background-color: #00b894;
             color: white;
-            font-weight: bold;
-        }
-
-        .running {
-            background-color: #4CAF50;
-        }
-
-        button {
-            padding: 5px 10px;
-            margin: 2px;
-            cursor: pointer;
+            padding: 8px 15px;
             border: none;
             border-radius: 5px;
-            color: #fff;
-            font-size: 14px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
         }
 
-        .btn-start {
-            background-color: #4CAF50;
+        .card table .reject-btn {
+            background-color: #dc3545;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
         }
 
-        .btn-stop {
-            background-color: #f44336;
+        .card table .approve-btn:hover {
+            background-color: #00a27d;
         }
 
-        .btn-remove {
-            background-color: #FF9800;
+        .card table .reject-btn:hover {
+            background-color: #c82333;
         }
 
-        button:hover {
-            opacity: 0.8;
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .main-content {
+                margin-left: 200px;
+                width: calc(100% - 200px);
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .card table th, .card table td {
+                padding: 12px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Container List</h1>
-        <table id="container-table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>State</th>
-                    <th>Quick Actions</th>
-                    <th>Stack</th>
-                    <th>Image</th>
-                    <th>Created</th>
-                    <th>IP Address</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>lab-workspace-admin</td>
-                    <td class="status running">Running</td>
-                    <td>
-                        <button class="btn-start">Start</button>
-                        <button class="btn-stop">Stop</button>
-                        <button class="btn-remove">Remove</button>
-                    </td>
-                    <td>ml-workspace-lab:2.2.0-SNAPSHOT</td>
-                    <td>59bb1875fcd2</td>
-                    <td>2020-08-19 10:27:47</td>
-                    <td>172.3.4.1</td>
-                </tr>
-                <tr>
-                    <td>lab-backend</td>
-                    <td class="status running">Running</td>
-                    <td>
-                        <button class="btn-start">Start</button>
-                        <button class="btn-stop">Stop</button>
-                        <button class="btn-remove">Remove</button>
-                    </td>
-                    <td>ubuntu:18.04</td>
-                    <td>bb077edf4e2a</td>
-                    <td>2020-08-14 11:40:02</td>
-                    <td>172.3.4.2</td>
-                </tr>
-                <!-- Add more container rows as needed -->
-            </tbody>
-        </table>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Admin Panel</h2>
+        <a href="#">Dashboard</a>
+        <a href="#">Manage Token Rewards</a>
+        <a href="#">View Threat Reports</a>
+        <a href="#">Settings</a>
+        <a href="#">Logout</a>
     </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const startButtons = document.querySelectorAll('.btn-start');
-            const stopButtons = document.querySelectorAll('.btn-stop');
-            const removeButtons = document.querySelectorAll('.btn-remove');
-            
-            startButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    alert('Starting container...');
-                    // Add your start container logic here
-                });
-            });
-            
-            stopButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    alert('Stopping container...');
-                    // Add your stop container logic here
-                });
-            });
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <h1>Manage Token Rewards</h1>
+        </div>
 
-            removeButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    alert('Removing container...');
-                    // Add your remove container logic here
-                });
-            });
-        });
-    </script>
+        <!-- Threat Report Management Card -->
+        <div class="card">
+            <h3>Threat Reports Overview</h3>
+            <form method="POST" action="{{ url_for('admin_bp.admin_dashboard') }}">
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Summary</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for threat in threats %}
+                        <tr>
+                            <td>{{ threat.threat_title }}</td>
+                            <td>{{ threat.summary or 'N/A' }}</td>
+                            <td>
+                                <input type="hidden" name="threat_id" value="{{ threat.id }}">
+                                <button type="submit" name="action" value="approve" class="approve-btn">Approve</button>
+                                <button type="submit" name="action" value="reject" class="reject-btn">Reject</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </form>
+        </div>
+
+        <!-- Another Card (e.g., Token Rewards) -->
+        <div class="card">
+            <h3>Manage Token Rewards</h3>
+            <p>Here you can manage token rewards for users based on their actions.</p>
+            <!-- Add form for approving/rejecting tokens here -->
+        </div>
+    </div>
+
 </body>
 </html>

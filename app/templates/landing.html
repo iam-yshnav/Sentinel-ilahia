@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentinel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body class="landing">
+    <div class="landing-navbar">
+        <div class="landing-logo">
+            <img src="logo-placeholder.png" alt="Sentinel Logo" />
+            <h1>Sentinel</h1>
+        </div>
+        <div class="landing-nav-links">
+            <a href="leaderboard.html">Leaderboard</a>
+            <a href="guidelines.html">Guidelines</a>
+            <a href="faq.html">FAQ</a>
+        </div>
+    </div>
+
+    <div class="landing-container">
+        <h2>Are You a Bug Hunter?</h2>
+        <div class="landing-buttons">
+            <button class="landing-btn" onclick="window.location.href='auth/login'">Login</button>
+            <button class="landing-btn" onclick="window.location.href='auth/register'">Register</button>
+        </div>
+        <h2 style="margin-top: 40px;">Do You Need Our Service?</h2>
+        <div class="landing-buttons">
+            <button class="landing-btn" onclick="window.location.href='app/templates/companylogin.html'">Login</button>
+            <button class="landing-btn" onclick="window.location.href='register.html'">Register</button>
+        </div>
+    </div>
+
+    <div class="landing-footer">
+        <div class="landing-extra-content">
+            <div class="landing-card">
+                <h3>Recent Bug</h3>
+                <p>Cross-Site Scripting in Example.com - $200 Reward</p>
+            </div>
+            <div class="landing-card">
+                <h3>Top Hunter</h3>
+                <p>Jane Doe - $1200 Rewards Earned</p>
+            </div>
+            <div class="landing-card">
+                <h3>Platform Stats</h3>
+                <p>500+ Bugs Reported</p>
+                <p>$50,000 Rewards Distributed</p>
+            </div>
+        </div>
+        <div>
+            &copy; 2025 Sentinel - All Rights Reserved
+        </div>
+    </div>
+</body>
+</html>
