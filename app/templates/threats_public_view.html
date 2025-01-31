@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentinel - Threat Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f8f9fa; }
+        .container { max-width: 1200px; margin: auto; padding: 20px; }
+        .card-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; padding: 20px; }
+        .card { border-radius: 8px; padding: 15px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
+        .severity-low { background-color: #e6f3e6; }
+        .severity-medium { background-color: #fff4e6; }
+        .severity-high { background-color: #ffebee; }
+        .severity-critical { background-color: #ffcdd2; }
+        .card h2 { font-size: 1.2em; margin-bottom: 10px; }
+        .card p { margin: 5px 0; }
+        details { cursor: pointer; }
+    </style>
+</head>
+<body class="landing">
+    <div class="landing-navbar">
+        <div class="landing-logo">
+            <img src="logo-placeholder.png" alt="Sentinel Logo" />
+            <h1>Sentinel</h1>
+        </div>
+        <div class="landing-nav-links">
+            <a href="leaderboard.html">Leaderboard</a>
+            <a href="guidelines.html">Guidelines</a>
+            <a href="faq.html">FAQ</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <h1>Threat Intelligence Reports</h1>
+        <div class="card-container">
+            {% for threat in threats %}
+            <div class="card severity-{{ threat.severity_level.lower() }}">
+                <h2>{{ threat.threat_title }}</h2>
+                <p><strong>Severity:</strong> {{ threat.severity_level }}</p>
+                <p><strong>Impact Type:</strong> {{ threat.impact_type }}</p>
+                <p><strong>Affected Platforms:</strong> {{ threat.affected_platforms }}</p>
+                <p><strong>Summary:</strong> {{ threat.summary or 'N/A' }}</p>
+                <details>
+                    <summary><strong>View Detailed Description</strong></summary>
+                    <p>{{ threat.detailed_description }}</p>
+                </details>
+                <p><strong>IOCs:</strong> {{ threat.iocs or 'No IOCs provided' }}</p>
+                <p><strong>Mitigation Actions:</strong> {{ threat.mitigation_actions or 'N/A' }}</p>
+                <p><strong>Reported On:</strong> {{ threat.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
