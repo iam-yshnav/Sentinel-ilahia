@@ -43,7 +43,7 @@ def submit_threat():
     for field in required_fields:
         if not request.form.get(field):
             flash(f"{field.replace('_', ' ').capitalize()} is required.", "danger")
-            return redirect(url_for('main.threat_reports'))
+            return redirect(url_for('main_bp.threat_reports'))
 
     # 🔹 Extract Form Data
     threat_title = request.form.get('threat_title')
@@ -68,7 +68,7 @@ def submit_threat():
         attachment_path = os.path.join(upload_folder, filename)
         attachment.save(attachment_path)
 
-    # 🔹 Create New Threat Report
+    # 🔹 Create New Threat Repor
     threat_report = ThreatReport(
         threat_title=threat_title,
         summary=summary,
