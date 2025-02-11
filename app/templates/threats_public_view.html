@@ -36,20 +36,22 @@
         <h1>Threat Intelligence Reports</h1>
         <div class="card-container">
             {% for threat in threats %}
-            <div class="card severity-{{ threat.severity_level.lower() }}">
-                <h2>{{ threat.threat_title }}</h2>
-                <p><strong>Severity:</strong> {{ threat.severity_level }}</p>
-                <p><strong>Impact Type:</strong> {{ threat.impact_type }}</p>
-                <p><strong>Affected Platforms:</strong> {{ threat.affected_platforms }}</p>
-                <p><strong>Summary:</strong> {{ threat.summary or 'N/A' }}</p>
-                <details>
-                    <summary><strong>View Detailed Description</strong></summary>
-                    <p>{{ threat.detailed_description }}</p>
-                </details>
-                <p><strong>IOCs:</strong> {{ threat.iocs or 'No IOCs provided' }}</p>
-                <p><strong>Mitigation Actions:</strong> {{ threat.mitigation_actions or 'N/A' }}</p>
-                <p><strong>Reported On:</strong> {{ threat.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
-            </div>
+                {% if threat.approved and not threat.deleted %}
+                <div class="card severity-{{ threat.severity_level.lower() }}">
+                    <h2>{{ threat.threat_title }}</h2>
+                    <p><strong>Severity:</strong> {{ threat.severity_level }}</p>
+                    <p><strong>Impact Type:</strong> {{ threat.impact_type }}</p>
+                    <p><strong>Affected Platforms:</strong> {{ threat.affected_platforms }}</p>
+                    <p><strong>Summary:</strong> {{ threat.summary or 'N/A' }}</p>
+                    <details>
+                        <summary><strong>View Detailed Description</strong></summary>
+                        <p>{{ threat.detailed_description }}</p>
+                    </details>
+                    <p><strong>IOCs:</strong> {{ threat.iocs or 'No IOCs provided' }}</p>
+                    <p><strong>Mitigation Actions:</strong> {{ threat.mitigation_actions or 'N/A' }}</p>
+                    <p><strong>Reported On:</strong> {{ threat.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                </div>
+                {% endif %}
             {% endfor %}
         </div>
     </div>

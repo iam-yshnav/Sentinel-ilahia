@@ -1,10 +1,14 @@
-from flask import request, jsonify
+from flask import render_template, request, jsonify
 from app import db
 from app.models import Organization, User, Asset
 from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identity
 
 
 from app.org import org_bp
+@org_bp.route('/')
+def server():
+    return render_template('server.html')
+
 
 # TODO : Add auth stuff
 @org_bp.route('/create', methods=['POST'])
@@ -27,4 +31,5 @@ def create_organiztion():
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
+    
 

@@ -29,23 +29,24 @@ class Asset(db.Model):
 
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-
 class ThreatReport(db.Model):
     __tablename__ = 'threat_reports'
 
     id = db.Column(db.Integer, primary_key=True)
-    threat_title = db.Column(db.String(300), nullable=False) 
-    summary = db.Column(db.Text) # TODO : make it nullable in future, Also put in FE validation
+    threat_title = db.Column(db.String(300), nullable=False)
+    summary = db.Column(db.Text)
     iocs = db.Column(db.Text)
-    affected_platforms = db.Column(db.Text) # OS Limit to 3 from frontend
-    affected_platform_ver = db.Column(db.Text) # Make it string with <,> and versions
+    affected_platforms = db.Column(db.Text)
+    affected_platform_ver = db.Column(db.Text)
     affected_service = db.Column(db.Text)
     affected_service_ver = db.Column(db.Text)
     detailed_description = db.Column(db.Text, nullable=False)
     impact_type = db.Column(db.String(50))
-    severity_level = db.Column(db.String(50)) # TODO: Restrict from frontend will be fine
+    severity_level = db.Column(db.String(50))
     mitigation_actions = db.Column(db.Text)
     attachment_path = db.Column(db.String(250))
+    approved = db.Column(db.Boolean, default=False)
+    deleted = db.Column(db.Boolean, default=False)  # Soft delete flag
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
@@ -81,5 +82,3 @@ class User(db.Model):
 
     def __repr__(self):
         return f'<User {self.username}>'
-
-

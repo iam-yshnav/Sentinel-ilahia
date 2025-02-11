@@ -3,14 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Threat Submission Portal - Login</title>
+    <title>Sentinel - Secure Login</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script>
+        function togglePassword() {
+            var passwordInput = document.getElementById("password");
+            var toggleIcon = document.getElementById("toggle-icon");
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleIcon.textContent = "🙈"; 
+            } else {
+                passwordInput.type = "password";
+                toggleIcon.textContent = "👁️"; 
+            }
+        }
+    </script>
 </head>
 <body>
     <!-- Header -->
     <header class="header">
-        <h1>Threat Submission Portal</h1>
+        <h1>Sentinel - Login</h1>
     </header>
+
+ 
 
     <!-- Main Content -->
     <main class="container">
@@ -31,7 +46,7 @@
             <!-- Right Panel -->
             <div class="form-card">
                 <h2>Login</h2>
-                <form action="/login" method="POST" class="submission-form">
+                <form action="{{ url_for('auth_bp.login') }}" method="POST" class="submission-form">
                     <div class="form-group">
                         <label for="username">Username or Email</label>
                         <input 
@@ -45,13 +60,16 @@
 
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            placeholder="Enter your password"
-                            required
-                        >
+                        <div class="password-container">
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="Enter your password"
+                                required
+                            >
+                            <span id="toggle-icon" onclick="togglePassword()" class="password-toggle">👁️</span>
+                        </div>
                     </div>
 
                     <div class="form-actions">
@@ -61,7 +79,7 @@
                 </form>
 
                 <p class="helper-text">
-                    Don't have an account? <a href="/auth/register">Create one here</a>.
+                    Don't have an account? <a href="{{ url_for('auth_bp.register') }}">Create one here</a>.
                 </p>
             </div>
         </div>
