@@ -23,11 +23,22 @@ class Asset(db.Model):
     asset_name = db.Column(db.String(200), nullable=False)
     os_name = db.Column(db.String(100), nullable=False)
     os_version = db.Column(db.String(50), nullable=False)
-    service_name = db.Column(db.String(150), nullable=True)
-    service_version = db.Column(db.String(50), nullable=True)
-    organization_id = db.Column(db.Integer, db.ForeignKey('organizations.id'), nullable=False)
+    ip_address = db.Column(db.String(45), nullable=False, index=True)  # IPv4 & IPv6
+    service_name = db.Column(db.String(100))
+    service_version = db.Column(db.String(50))
+    organization_id = db.Column(db.Integer, db.ForeignKey('organizations.id'), nullable=False) 
+    server_purpose = db.Column(db.String(50), nullable=False)
+    cpu_configuration = db.Column(db.Integer, nullable=False)  # Number of cores
+    ram_capacity = db.Column(db.Integer, nullable=False)  # RAM in GB
+    storage_configuration = db.Column(db.Text)
+    network_configuration = db.Column(db.Text)
+    security_protocols = db.Column(db.Text)
+    admin_contact = db.Column(db.String(100), nullable=False)
 
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    def __repr__(self):
+        return f'<Asset {self.server_name}>'
+
+
 
 class ThreatReport(db.Model):
     __tablename__ = 'threat_reports'
