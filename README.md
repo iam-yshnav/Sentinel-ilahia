@@ -30,7 +30,9 @@ Major Routes
 /   -> Main Route ( Threat Page )
 
 / Auth -> Everything related to authentication
+
 / Admin -> Admin related activites
+
 / org   -> organization realated applications
 
 | Sl No | Route                              | Methods    | Category          | Use of Endpoint                                      | Remarks                                   | Implemented |
