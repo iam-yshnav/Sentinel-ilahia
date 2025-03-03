@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Admin Organizations</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+            rel="stylesheet"
+        />
+        <script
+            src="https://kit.fontawesome.com/a076d05399.js"
+            crossorigin="anonymous"
+        ></script>
+        <style>
+            /* Global styles */
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: "Poppins", sans-serif;
+            }
+            body {
+                background-color: #f4f4f4;
+            }
+            .container {
+                display: flex;
+                min-height: 100vh;
+            }
+            /* Sidebar */
+            .sidebar {
+                width: 260px;
+                background-color: #2c3e50;
+                color: white;
+                padding: 20px;
+            }
+            .sidebar h2 {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+            .sidebar a {
+                display: block;
+                padding: 10px;
+                color: white;
+                text-decoration: none;
+                margin-bottom: 10px;
+                border-radius: 4px;
+            }
+            .sidebar a:hover {
+                background-color: #1abc9c;
+            }
+            /* Main content */
+            .main-content {
+                flex: 1;
+                padding: 20px;
+                display: flex;
+                flex-direction: row;
+                gap: 20px;
+            }
+            /* Left pane (list of organizations) */
+            .left-pane {
+                flex: 1;
+                background-color: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                overflow-x: auto;
+            }
+            /* Right pane (add organization form) */
+            .right-pane {
+                flex: 1;
+                background-color: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            }
+            h1,
+            h2 {
+                margin-bottom: 20px;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            table th,
+            table td {
+                padding: 12px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+            table th {
+                background-color: #1abc9c;
+                color: white;
+            }
+            table tr:hover {
+                background-color: #e8f6f3;
+            }
+            .btn {
+                padding: 8px 15px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 14px;
+            }
+            .delete-btn {
+                background-color: #e74c3c;
+                color: white;
+            }
+            .add-btn {
+                background-color: #27ae60;
+                color: white;
+            }
+            input[type="text"] {
+                width: 100%;
+                padding: 10px;
+                margin-bottom: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+            label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: 600;
+            }
+            @media (max-width: 768px) {
+                .main-content {
+                    flex-direction: column;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        {% for mesg in get_flashed_messages() %}
+      <h1>{{ mesg }}</h1>
+      {% endfor %}
+        <!-- Sidebar Navigation -->
+        <!-- <div class="sidebar">
+            <h2>Admin Panel</h2>
+            <a href="dashboard.html"
+                ><i class="fas fa-tachometer-alt"></i> Dashboard</a
+            >
+            <a href="threat_reports.html"
+                ><i class="fas fa-exclamation-triangle"></i> Threat Reports</a
+            >
+            <a href="users.html"><i class="fas fa-users"></i> Users</a>
+            <a href="admin_organization.html"
+                ><i class="fas fa-building"></i> Organizations</a
+            >
+            <a href="settings.html"><i class="fas fa-cogs"></i> Settings</a>
+            <a href="logout.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div> -->
+
+        <!-- Main Content: Left Pane = List Organizations, Right Pane = Add Organization -->
+        <div class="main-content">
+            <!-- Left Pane: List Organizations with Delete Option -->
+            <div class="left-pane">
+                <h1>Organizations</h1>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Industry</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for organization in organizations %}
+                        <tr>
+                            <td>{{ organization.name }}</td>
+                            <td>{{ organization.industry }}</td>
+                            <td>
+                                <form
+                                    action="/admin/orgs/ban/{{ organization.id }}"
+                                    method="post"
+                                    onsubmit="return confirm('Are you sure you want to ban this organization?');"
+                                >
+                                    <button
+                                        type="submit"
+                                        class="btn delete-btn"
+                                    >
+                                        Ban
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Right Pane: Add Organization Form -->
+            <div class="right-pane">
+                <h1>Add Organization</h1>
+                <form action="{{ url_for('admin.add_organization') }}" method="post">
+
+                    <label for="org-name">Name</label>
+                    <input
+                        type="text"
+                        id="org-name"
+                        name="name"
+                        placeholder="Enter organization name"
+                        required
+                    />
+
+                    <label for="org-industry">Industry</label>
+                    <input
+                        type="text"
+                        id="org-industry"
+                        name="industry"
+                        placeholder="Enter industry"
+                        required
+                    />
+
+                    <button type="submit" class="btn add-btn">
+                        Add Organization
+                    </button>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

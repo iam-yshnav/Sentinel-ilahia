@@ -1,4 +1,4 @@
-from flask import render_template, request, jsonify
+from flask import render_template, request, jsonify, redirect, url_for
 from app import db
 from app.models import Organization, User, Asset
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -12,7 +12,7 @@ def server():
 
 # Create Organization (Admin Only)
 @org_bp.route('/create', methods=['POST'])
-@jwt_required()
+@jwt_required()   # 
 def create_organization():
     # Get current user from JWT
     current_user_id = get_jwt_identity()
