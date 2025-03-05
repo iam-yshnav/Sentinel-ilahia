@@ -33,120 +33,74 @@
                 <h2>Create an Account</h2>
                 <form action="/auth/register" method="POST" class="submission-form">
                     
+                    <!-- Organization (Moved Up for UX) -->
                     <div class="form-group">
-                        <label for="salutation">Salutation *</label>
-                        <input 
-                            type="text"
-                            id="salutation"
-                            name="salutation"
-                            placeholder="Mr."
-                            required
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="name">Full Name *</label>
-                        <input 
-                            type="text"
-                            id="name"
-                            name="name"
-                            placeholder="Enter your full name"
-                            required
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="username">Username *</label>
-                        <input
-                            type="text"
-                            id="username"
-                            name="username"
-                            placeholder="Choose a username"
-                            required
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email">Email Address *</label>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            placeholder="Enter your email"
-                            required
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="designation">Designation *</label>
-                        <input
-                            type="text"
-                            id="designation"
-                            name="designation"
-                            placeholder="Senior Security Manager"
-                            required
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="team">Team *</label>
-                        <input
-                            type="text"
-                            id="team"
-                            name="team"
-                            placeholder="SDE - T"
-                            required
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="domain">Domain *</label>
-                        <input
-                            type="text"
-                            id="domain"
-                            name="domain"
-                            placeholder="wattlecorp.com"
-                            required
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="organization">Organization *</label>
-                        <select name="organization" >
+                        <label for="organization_id">Organization *</label>
+                        <select name="organization_id" id="organization_id" required>
                             <option value="">-- Select Organization --</option>
                             {% for org in organizations %}
                                 <option value="{{ org.id }}">{{ org.name }}</option>
                             {% endfor %}
                         </select>
                     </div>
+                    
+
+                    <!-- Personal Details -->
+                    <div class="form-group">
+                        <label for="name">Full Name *</label>
+                        <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+                    </div>
 
                     <div class="form-group">
+                        <label for="salutation">Salutation *</label>
+                        <input type="text" id="salutation" name="salutation" placeholder="Mr./Ms./Dr." required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="username">Username *</label>
+                        <input type="text" id="username" name="username" placeholder="Choose a username" required>
+                    </div>
+
+                    <!-- Professional Details -->
+                    <div class="form-group">
+                        <label for="designation">Designation *</label>
+                        <input type="text" id="designation" name="designation" placeholder="Senior Security Manager" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="team">Team *</label>
+                        <input type="text" id="team" name="team" placeholder="SDE - T" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="domain">Domain *</label>
+                        <input type="text" id="domain" name="domain" placeholder="wattlecorp.com" required>
+                    </div>
+
+                    <!-- Password Fields -->
+                    <div class="form-group">
                         <label for="password">Password *</label>
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            placeholder="Create a password"
-                            required
-                        >
+                        <input type="password" id="password" name="password" placeholder="Create a password" required>
                     </div>
 
                     <div class="form-group">
                         <label for="confirm_password">Confirm Password *</label>
-                        <input
-                            type="password"
-                            id="confirm_password"
-                            name="confirm_password"
-                            placeholder="Confirm your password"
-                            required
-                        >
+                        <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
                     </div>
 
+                    <!-- Form Actions -->
                     <div class="form-actions">
                         <button type="submit" class="btn-submit">Register</button>
                         <button type="reset" class="btn-reset">Clear</button>
                     </div>
                 </form>
+
+                <!-- Login Link -->
                 <p class="helper-text">
                     Already have an account? <a href="/login">Login here</a>.
                 </p>
@@ -158,5 +112,30 @@
     <footer class="footer">
         <p>Join our community and help build safer cyber environments.</p>
     </footer>
+
+    <!-- Password Validation Script -->
+    <script>
+        document.querySelector(".submission-form").addEventListener("submit", function(event) {
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirm_password").value;
+
+            if (password !== confirmPassword) {
+                event.preventDefault();
+                alert("Passwords do not match!");
+            }
+        });
+
+        document.getElementById("organization_id").addEventListener("change", function() {
+            let companyField = document.getElementById("company");
+            if (this.value) {
+                 companyField.disabled = true;
+                companyField.value = "";
+            } else {
+                 companyField.disabled = false;
+            }
+        });
+
+    </script>
+
 </body>
 </html>

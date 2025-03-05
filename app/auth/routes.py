@@ -3,9 +3,7 @@ import secrets  # For generating random tokens
 from flask import request, jsonify, redirect, url_for, flash, render_template, session
 from app import db
 from app.auth import auth_bp
-from app.models import User
-
-# 📝 REGISTER ROUTE
+from app.models import Organization, User
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -13,10 +11,21 @@ def register():
         password = request.form.get('password')
         name = request.form.get('name')
         salutation = request.form.get('salutation')
+        organization_id = request.form.get('organization_id')  # ✅ Get organization ID from form
         company = request.form.get('company')
         designation = request.form.get('designation')
         team = request.form.get('team')
         domain = request.form.get('domain')
+
+        # Convert organization_id to an integer if selected
+        if organization_id and organization_id.isdigit():
+            organization_id = int(organization_id)
+        else:
+            organization_id = None  # Ensure it's None if not selected
+
+        # If organization is selected, ignore company field
+        if organization_id:
+            company = None  # ✅ Avoid storing both organization and company
 
         # Check if username already exists
         existing_user = User.query.filter_by(username=username).first()
@@ -30,7 +39,8 @@ def register():
             role='user',
             name=name,
             salutation=salutation,
-            company=company,
+            organization_id=organization_id,  # ✅ Store organization ID
+            company=company,  # ✅ Company is only stored if no organization is selected
             designation=designation,
             team=team,
             domain=domain
@@ -43,7 +53,10 @@ def register():
         flash("Registered successfully! You can now log in.", "success")
         return redirect(url_for('auth_bp.login'))  # ✅ Redirects to login after successful registration
 
-    return render_template('register.html')
+    # ✅ Fetch organizations from the database and pass them to the template
+    organizations = Organization.query.all()
+    return render_template('register.html', organizations=organizations)
+
 
 # 📝 LOGIN ROUTE (MODIFIED ✅)
 @auth_bp.route('/login', methods=['GET', 'POST'])

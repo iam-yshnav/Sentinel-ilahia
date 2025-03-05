@@ -83,7 +83,8 @@ class User(db.Model):
     designation = db.Column(db.String(120), nullable=True)
     team = db.Column(db.String(120), nullable=True)
     domain = db.Column(db.String(120), nullable=True)
-
+    status = db.Column(db.String(20), default='pending')  
+    # Possible values: 'pending', 'approved', 'revoked', 'banned'
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def set_password(self, password):
