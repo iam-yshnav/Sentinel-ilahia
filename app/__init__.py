@@ -2,15 +2,17 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import os
+from flask_jwt_extended import JWTManager
 # Init -> Initilizstion -> meaning  if app package is called it will start __init__.py
 
 db = SQLAlchemy() # ORM  https://auth0.com/blog/sqlalchemy-orm-tutorial-for-python-developers/
 migrate = Migrate()
 
-
 def  create_app():
     app = Flask(__name__, instance_relative_config=True)
-    
+    app.config["JWT_SECRET_KEY"] = "super-secret" # TODO : put something good here. 
+    jwt = JWTManager(app)
+
 
     app.config.from_object('app.config.Config')
     
