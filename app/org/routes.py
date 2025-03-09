@@ -10,49 +10,6 @@ def server():
     return render_template('server.html')
 
 
-# Create Organization (Admin Only)
-@org_bp.route('/create', methods=['POST'])
-@jwt_required()   # 
-def create_organization():
-    # Get current user from JWT
-    current_user_id = get_jwt_identity()
-    current_user = User.query.get(current_user_id)
-
-    # Check if user is admin
-    if not current_user or not current_user.is_admin:
-        return jsonify({"error": "Unauthorized. Admin access required"}), 403
-
-    # Get data from request
-    data = request.get_json()
-    if not data or 'name' not in data:
-        return jsonify({"error": "Organization name is required"}), 400
-
-    new_org = Organization(
-        name=data['name'],
-        industry=data.get('industry')
-    )
-
-    try:
-        db.session.add(new_org)
-        db.session.commit()
-        return jsonify({
-            "message": "Organization created successfully",
-            "organization_id": new_org.id
-        }), 201
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({"error": str(e)}), 500
-
-
-# Get All Organizations
-@org_bp.route('/list', methods=['GET'])
-@jwt_required()
-def list_organizations():
-    organizations = Organization.query.all()
-    org_list = [{"id": org.id, "name": org.name, "industry": org.industry} for org in organizations]
-    
-    return jsonify({"organizations": org_list}), 200
-
 
 # Create Asset (Attach to an Organization)
 @org_bp.route('/create_asset', methods=['POST'])

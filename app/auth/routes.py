@@ -1,9 +1,14 @@
 import os
 import secrets  # For generating random tokens
-from flask import request, jsonify, redirect, url_for, flash, render_template, session
+from flask import request, jsonify, redirect, url_for, flash, render_template, session, make_response
 from app import db
 from app.auth import auth_bp
 from app.models import Organization, User
+from flask_jwt_extended import (
+    JWTManager, create_access_token, jwt_required, get_jwt_identity,
+    set_access_cookies, unset_jwt_cookies
+)
+
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -64,20 +69,17 @@ def login():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
+        print(username, password)
         user = User.query.filter_by(username=username).first()
 
         if user and user.check_password(password):
             # Generate a token and store it
-            token = secrets.token_hex(16)
-            user.token = token
-            db.session.commit()
-
-            session['user_id'] = user.id  # Storing user session
-            flash("Login successful!", "success")
-
-            return redirect(url_for('all'))  # ✅ Redirects to /all on successful login
-
+            access_token = create_access_token(identity=username)
+            resp = make_response(redirect(url_for('main_bp.about_me'))) # TODO change this in neat future
+            set_access_cookies(resp, access_token)
+            return resp
         flash("Invalid credentials. Please try again.", "error")  # ✅ Flash error message
+        print("Invalid credentials. Please try again")
         return redirect(url_for('auth_bp.login'))  # ✅ Redirects back to login on failure
 
     return render_template('login.html')

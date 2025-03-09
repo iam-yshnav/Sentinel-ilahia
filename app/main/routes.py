@@ -3,7 +3,7 @@ from werkzeug.utils import secure_filename
 from functools import wraps
 from app.models import User, ThreatReport
 import os
-
+from flask_jwt_extended import get_jwt_identity, jwt_required
 from app import db
 from app.main import main_bp
 
@@ -29,6 +29,16 @@ def threat_reports():
     threats = ThreatReport.query.all()
     return render_template('report.html', threats=threats)  # ✅ Display threats properly
 
+@main_bp.route('/me', methods=['GET'])
+@jwt_required()
+def about_me():
+    user_name = get_jwt_identity()
+    print(user_name)
+    user = User.query.get(username=user_name).first()
+    if not user:
+        return "The user was not found" # TODO : Handle this case here
+
+    return render_template("me.html", user=user)
 # ✅ Route for Public Threat View
 @main_bp.route('/all', methods=['GET'])
 def public_threats():
