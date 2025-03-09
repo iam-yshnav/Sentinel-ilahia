@@ -1,0 +1,62 @@
+<!-- templates/me.html -->
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>My Profile</title>
+  <style>
+    table { border-collapse: collapse; width: 50%; margin: 20px auto; }
+    th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }
+    th { background: #f4f4f4; }
+  </style>
+</head>
+<body>
+  <h1 style="text-align: center;">My Profile</h1>
+  <table>
+    <tr>
+      <th>ID</th>
+      <td>{{ user.id }}</td>
+    </tr>
+    <tr>
+      <th>Username</th>
+      <td>{{ user.username }}</td>
+    </tr>
+    <tr>
+      <th>Role</th>
+      <td>{{ user.role }}</td>
+    </tr>
+    <tr>
+      <th>Name</th>
+      <td>{{ user.name }}</td>
+    </tr>
+    <tr>
+      <th>Salutation</th>
+      <td>{{ user.salutation }}</td>
+    </tr>
+    <tr>
+      <th>Company</th>
+      <td>{{ user.company }}</td>
+    </tr>
+    <tr>
+      <th>Designation</th>
+      <td>{{ user.designation }}</td>
+    </tr>
+    <tr>
+      <th>Team</th>
+      <td>{{ user.team }}</td>
+    </tr>
+    <tr>
+      <th>Domain</th>
+      <td>{{ user.domain }}</td>
+    </tr>
+    <tr>
+      <th>Status</th>
+      <td>{{ user.status }}</td>
+    </tr>
+    <tr>
+      <th>Created At</th>
+      <td>{{ user.created_at }}</td>
+    </tr>
+  </table>
+</body>
+</html>
