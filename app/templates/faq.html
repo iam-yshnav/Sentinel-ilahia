@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e3f2fd;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #2196f3;
+            text-align: center;
+            position: relative;
+        }
+        .header-box {
+            background: #0d47a1;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            border-radius: 8px 8px 0 0;
+            font-size: 24px;
+            font-weight: bold;
+            position: relative;
+        }
+        .home-btn {
+            position: absolute;
+            top: -50px;
+            left: 15px;
+            padding: 8px 16px;
+            background: #ffffff;
+            color: #0d47a1;
+            border: 2px solid #0d47a1;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .home-btn:hover {
+            background: #0d47a1;
+            color: white;
+        }
+        .faq {
+            text-align: left;
+            padding: 10px;
+        }
+        .faq h3 {
+            color: #1565c0;
+        }
+        .ask-question {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f1f8ff;
+            border-radius: 8px;
+            border: 1px solid #2196f3;
+        }
+        .ask-question h3 {
+            margin-bottom: 10px;
+        }
+        .ask-question textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #2196f3;
+            resize: none;
+        }
+        .ask-question button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: #0d47a1;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .ask-question button:hover {
+            background: #1565c0;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #0d47a1;
+        }
+        @media (max-width: 600px) {
+            .container {
+                width: 90%;
+            }
+            .home-btn {
+                top: -45px;
+                left: 10px;
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="home-btn">Home</a>
+        <div class="header-box">Frequently Asked Questions</div>
+        <div class="faq">
+            <h3>What is this platform about?</h3>
+            <p>This platform allows users to submit cybersecurity threats and helps companies identify which servers are affected.</p>
+            
+            <h3>How do I submit a threat?</h3>
+            <p>You can submit a threat by filling out the threat submission form available on our website.</p>
+            
+            <h3>How are threats verified?</h3>
+            <p>Our team reviews and verifies each submission before adding it to the system.</p>
+            
+            <h3>What rewards do I get for submitting a valid threat?</h3>
+            <p>Users who submit verified threats will receive rewards based on the severity and accuracy of the submission.</p>
+            
+            <h3>How can companies list their servers?</h3>
+            <p>Companies can register and add their server details through the company portal on our website.</p>
+            
+            <h3>Is there a limit to the number of threats I can submit?</h3>
+            <p>No, you can submit as many threats as you find, but ensure they are valid and not duplicates.</p>
+            
+            <h3>What happens if I submit false information?</h3>
+            <p>Submitting false information can lead to penalties, including being banned from the platform.</p>
+            
+            <h3>How can I track the status of my submitted threat?</h3>
+            <p>You can track the status of your submission through your user dashboard.</p>
+            
+            <h3>Can I edit a threat submission after submitting it?</h3>
+            <p>No, once submitted, a threat cannot be edited. If necessary, you can submit an updated version.</p>
+        </div>
+        <div class="ask-question">
+            <h3>Ask a Question</h3>
+            <textarea rows="4" placeholder="Type your question here..."></textarea>
+            <button>Submit</button>
+        </div>
+        <p class="footer">For more queries, contact our support team.</p>
+    </div>
+</body>
+</html>
