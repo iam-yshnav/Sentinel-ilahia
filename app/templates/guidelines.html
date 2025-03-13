@@ -4,14 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guidelines</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #e3f2fd;
-        }
-        .container {
+
+        .container-guidelines {
             max-width: 800px;
             margin: 20px auto;
             background: #ffffff;
@@ -63,7 +59,7 @@
             color: #0d47a1;
         }
         @media (max-width: 600px) {
-            .container {
+            .container-guidelines {
                 width: 90%;
             }
             .home-btn {
@@ -76,8 +72,21 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <a href="index.html" class="home-btn">Home</a>
+     <!-- Navbar from landing.html -->
+     <div class="landing-navbar">
+        <div class="landing-logo">
+            <img src="{{ url_for('static', filename='uploads/sentinel-black.png') }}" alt="Sentinel Logo">
+            <h1>Sentinel</h1>
+        </div>
+        <div class="landing-nav-links">
+            <a href="{{ url_for('main_bp.home') }}">Home</a>
+            <a href="{{ url_for('main_bp.guidelines') }}">Guidelines</a>
+            <a href="{{ url_for('main_bp.faq') }}">FAQ</a>
+        </div>
+    </div>
+    <!-- content-guildlines -->
+    <div class="container-guidelines">
+
         <div class="header-box">Guidelines</div>
         <p>Welcome to SENTINEL. Please follow these guidelines:</p>
         <ul>
