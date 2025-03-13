@@ -53,11 +53,11 @@ Major Routes
 | 14    | /admin/reject-threat/<int>         | POST       | Admin             | Reject a specific threat                             |                                           | ✅          |
 | 15    | /admin/delete_threat/<int>         | POST       | Admin             | Delete a specific threat                             | (Typo corrected from "Deltes")            | ✅          |
 | 16    | /admin/retain_threat/<int>         | POST       | Admin             | Restore a specific threat                            |                                           | ✅          |
-| 17    | /admin/user/<int>/approve          | POST       | Admin             | Approve a user for a specific company                | [To Implement]                            |             |
-| 18    | /admin/user/<int>/revoke           | POST       | Admin             | Revoke a user’s access to a company                  | [To Implement]                            |             |
-| 19    | /admin/user/<int>/ban              | POST       | Admin             | Remove a user from the system                        | [To Implement, controlled by role]        |             |
-| 20    | /admin/org/add/                    | GET, POST  | Admin             | Add a new organization                               | [To Implement]                            |             |
-| 21    | /admin/org/ban/<int>               | POST       | Admin             | Ban an organization                                  | [To Implement]                            |             |
+| 17    | /admin/user/<int>/approve          | POST       | Admin             | Approve a user for a specific company                | [To Implement]                            | ✅          |
+| 18    | /admin/user/<int>/revoke           | POST       | Admin             | Revoke a user’s access to a company                  | [To Implement]                            | ✅          |
+| 19    | /admin/user/<int>/ban              | POST       | Admin             | Remove a user from the system                        | [To Implement, controlled by role]        | ✅(partially)|
+| 20    | /admin/org/add/                    | GET, POST  | Admin             | Add a new organization                               | [To Implement]                            | ✅          |
+| 21    | /admin/org/ban/<int>               | POST       | Admin             | Ban an organization                                  | [To Implement]                            | ✅          |
 | 22    | /admin/org/deban/<int>             | POST       | Admin             | De-ban an organization                               | [To Implement]                            |             |
 | 23    | /org/create                        | POST       | Organization      | Create an organization                               | [Should be ported to admin routes]        | ✅          |
 | 24    | /org/list                          | GET        | Organization      | Get all assets within an organization                | [Should be ported to admin routes]        | ✅          |
