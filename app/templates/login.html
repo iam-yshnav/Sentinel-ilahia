@@ -5,13 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sentinel - Secure Login</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        .flashed-messages {
+    margin-bottom: 20px;
+}
+
+.alert {
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.alert-error {
+    background-color: #ffebee;
+    color: #c62828;
+    border: 1px solid #c62828;
+}
+
+.alert-success {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #2e7d32;
+}
+    </style>
     <script>
         function togglePassword() {
             var passwordInput = document.getElementById("password");
             var toggleIcon = document.getElementById("toggle-icon");
             if (passwordInput.type === "password") {
                 passwordInput.type = "text";
-                toggleIcon.textContent = "🙈"; 
+                toggleIcon.textContent = "👁️"; 
             } else {
                 passwordInput.type = "password";
                 toggleIcon.textContent = "👁️"; 
@@ -20,15 +43,33 @@
     </script>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <h1>Sentinel - Login</h1>
-    </header>
 
- 
+
+    <div class="landing-navbar">
+        <div class="landing-logo">
+            <img src="{{ url_for('static', filename='uploads/sentinel-black.png') }}" alt="Sentinel Logo">
+            <h1>Sentinel-Login</h1>
+        </div>
+        <div class="landing-nav-links">
+            <a href="{{ url_for('main_bp.home') }}">Home</a>
+            <a href="{{ url_for('main_bp.guidelines') }}">Guidelines</a>
+            <a href="{{ url_for('auth_bp.register') }}">Register</a>
+        </div>
+    </div>
 
     <!-- Main Content -->
     <main class="container">
+        <!-- Flashed Messages Section -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flashed-messages">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
         <div class="layout">
             <!-- Left Panel -->
             <aside class="left-panel">

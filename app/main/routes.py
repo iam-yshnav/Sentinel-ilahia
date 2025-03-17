@@ -32,11 +32,11 @@ def threat_reports():
 @main_bp.route('/me', methods=['GET'])
 @jwt_required()
 def about_me():
-    user_name = get_jwt_identity()
+    user_name = get_jwt_identity()    
     print(user_name)
-    user = User.query.get(username=user_name).first()
+    user = User.query.filter_by(username=user_name).first()
     if not user:
-        return "The user was not found" # TODO : Handle this case here
+        return "The user was not found", 404 # TODO : Handle this case here
 
     return render_template("me.html", user=user)
 
