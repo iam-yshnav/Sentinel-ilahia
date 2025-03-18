@@ -1,62 +1,162 @@
-<!-- templates/me.html -->
 <!doctype html>
 <html>
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>My Profile</title>
   <style>
-    table { border-collapse: collapse; width: 50%; margin: 20px auto; }
-    th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }
-    th { background: #f4f4f4; }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f8ff;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    .landing-navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #007bff;
+      padding: 10px 20px;
+      color: white;
+    }
+    .landing-logo {
+      display: flex;
+      align-items: center;
+    }
+    .landing-logo img {
+      height: 40px;
+      margin-right: 10px;
+    }
+    .landing-logo h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    .landing-nav-links a {
+      color: white;
+      text-decoration: none;
+      margin-left: 15px;
+      font-size: 16px;
+    }
+    .container {
+      width: 90%;
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      background: white;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      position: relative;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 28px;
+      color: #007bff;
+      font-weight: bold;
+    }
+    .rewards-box {
+      background: #007bff;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .rewards-box h2 {
+      margin: 0;
+      font-size: 16px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background: #007bff;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background: #f8f9fa;
+    }
+    .submit-threat {
+      display: block;
+      width: 100%;
+      margin-top: 20px;
+      padding: 12px;
+      background: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+    }
+    .submit-threat:hover {
+      background: #b02a37;
+    }
+    @media (max-width: 600px) {
+      table {
+        font-size: 14px;
+      }
+      th, td {
+        padding: 10px;
+      }
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .rewards-box {
+        width: 100%;
+        text-align: center;
+      }
+    }
   </style>
 </head>
 <body>
-  <h1 style="text-align: center;">My Profile</h1>
-  <table>
-    <tr>
-      <th>ID</th>
-      <td>{{ user.id }}</td>
-    </tr>
-    <tr>
-      <th>Username</th>
-      <td>{{ user.username }}</td>
-    </tr>
-    <tr>
-      <th>Role</th>
-      <td>{{ user.role }}</td>
-    </tr>
-    <tr>
-      <th>Name</th>
-      <td>{{ user.name }}</td>
-    </tr>
-    <tr>
-      <th>Salutation</th>
-      <td>{{ user.salutation }}</td>
-    </tr>
-    <tr>
-      <th>Company</th>
-      <td>{{ user.company }}</td>
-    </tr>
-    <tr>
-      <th>Designation</th>
-      <td>{{ user.designation }}</td>
-    </tr>
-    <tr>
-      <th>Team</th>
-      <td>{{ user.team }}</td>
-    </tr>
-    <tr>
-      <th>Domain</th>
-      <td>{{ user.domain }}</td>
-    </tr>
-    <tr>
-      <th>Status</th>
-      <td>{{ user.status }}</td>
-    </tr>
-    <tr>
-      <th>Created At</th>
-      <td>{{ user.created_at }}</td>
-    </tr>
-  </table>
+  <div class="landing-navbar">
+    <div class="landing-logo">
+      <img src="{{ url_for('static', filename='uploads/sentinel-black.png') }}" alt="Sentinel Logo">
+      <h1>Sentinel</h1>
+    </div>
+    <div class="landing-nav-links">
+      <a href="{{ url_for('main_bp.home') }}">Home</a>
+      <a href="{{ url_for('main_bp.guidelines') }}">Guidelines</a>
+      <a href="{{ url_for('main_bp.faq') }}">FAQ</a>
+    </div>
+  </div>
+  <div class="container">
+    <div class="header">
+      <h1>My Profile</h1>
+      <div class="rewards-box">
+        <h2>Total Rewards: {{ user.rewards }} Points</h2>
+      </div>
+    </div>
+    <table>
+      <tr><th>ID</th><td>{{ user.id }}</td></tr>
+      <tr><th>Username</th><td>{{ user.username }}</td></tr>
+      <tr><th>Role</th><td>{{ user.role }}</td></tr>
+      <tr><th>Name</th><td>{{ user.name }}</td></tr>
+      <tr><th>Salutation</th><td>{{ user.salutation }}</td></tr>
+      <tr><th>Company</th><td>{{ user.company }}</td></tr>
+      <tr><th>Designation</th><td>{{ user.designation }}</td></tr>
+      <tr><th>Team</th><td>{{ user.team }}</td></tr>
+      <tr><th>Domain</th><td>{{ user.domain }}</td></tr>
+      <tr><th>Status</th><td>{{ user.status }}</td></tr>
+      <tr><th>Created At</th><td>{{ user.created_at }}</td></tr>
+    </table>
+    <button class="submit-threat">Submit a Threat</button>
+  </div>
 </body>
 </html>
+
