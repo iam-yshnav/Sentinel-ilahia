@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #004080;
+            margin: 0;
+            padding: 0;
+        }
+        .header, .footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #004080;
+            color: white;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .form-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #004080;
+            border-radius: 5px;
+        }
+        .password-hint {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .btn-submit, .btn-reset {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-submit {
+            background-color: #004080;
+            color: white;
+        }
+        .btn-reset {
+            background-color: #e0e0e0;
+        }
+        .helper-text {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .helper-text a {
+            color: #004080;
+            text-decoration: none;
+        }
+        @media (max-width: 600px) {
+            .form-card {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Registration</h1>
+    </header>
+    <main class="container">
+        <div class="form-card">
+            <h2>Create an Account</h2>
+            <form action="/auth/register" method="POST" class="submission-form">
+                <div class="form-group">
+                    <label for="name">Full Name *</label>
+                    <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="salutation">Salutation *</label>
+                    <input type="text" id="salutation" name="salutation" placeholder="Mr./Ms./Dr." required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="username">Username *</label>
+                    <input type="text" id="username" name="username" placeholder="Choose a username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password *</label>
+                    <input type="password" id="password" name="password" placeholder="Create a password" required>
+                    <p class="password-hint">Minimum 8 characters is needed</p>
+                </div>
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password *</label>
+                    <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-submit">Register</button>
+                    <button type="reset" class="btn-reset">Clear</button>
+                </div>
+            </form>
+            <p class="helper-text">Already have an account? <a href="/login">Login here</a>.</p>
+        </div>
+    </main>
+    <footer class="footer">
+        <p>Join our community and help build safer cyber environments.</p>
+    </footer>
+    <script>
+        document.querySelector(".submission-form").addEventListener("submit", function(event) {
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirm_password").value;
+            if (password !== confirmPassword) {
+                event.preventDefault();
+                alert("Passwords do not match!");
+            }
+        });
+    </script>
+</body>
+</html>
