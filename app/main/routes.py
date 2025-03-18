@@ -32,13 +32,14 @@ def threat_reports():
 @main_bp.route('/me', methods=['GET'])
 @jwt_required()
 def about_me():
-    user_name = get_jwt_identity()
+    user_name = get_jwt_identity()    
     print(user_name)
-    user = User.query.get(username=user_name).first()
+    user = User.query.filter_by(username=user_name).first()
     if not user:
-        return "The user was not found" # TODO : Handle this case here
+        return "The user was not found", 404 # TODO : Handle this case here
 
     return render_template("me.html", user=user)
+
 # ✅ Route for Public Threat View
 @main_bp.route('/all', methods=['GET'])
 def public_threats():
@@ -78,7 +79,7 @@ def submit_threat():
         attachment_path = os.path.join(upload_folder, filename)
         attachment.save(attachment_path)
 
-    # 🔹 Create New Threat Repor
+    # 🔹 Create New Threat Report
     threat_report = ThreatReport(
         threat_title=threat_title,
         summary=summary,
@@ -104,3 +105,13 @@ def submit_threat():
         flash(f"Database error: {str(e)}", "danger")
 
     return redirect(url_for('main.threat_reports'))
+
+# ✅ Route for FAQ Page
+@main_bp.route('/faq')
+def faq():
+    return render_template('faq.html')  # ✅ Renders the FAQ page
+
+# ✅ Route for Guidelines Page
+@main_bp.route('/guidelines')
+def guidelines():
+    return render_template('guidelines.html')  # ✅ Renders the Guidelines page

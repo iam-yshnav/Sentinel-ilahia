@@ -141,20 +141,22 @@ footer {
     padding: 10px 20px;
     color: white;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-}
-.landing-navbar .landing-logo {
+} 
+.landing-logo {
     display: flex;
     align-items: center;
-    gap: 10px;
 }
+
 .landing-logo img {
     height: 40px;
-    width: 40px;
+    margin-right: 10px;
 }
+
 .landing-logo h1 {
-    font-size: 1.5rem;
+    font-size: 24px;
     margin: 0;
 }
+
 .landing-nav-links {
     display: flex;
     gap: 15px;

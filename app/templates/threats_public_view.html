@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <style>
         body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f8f9fa; }
-        .container { max-width: 1200px; margin: auto; padding: 20px; }
+        .public-container { max-width: 1200px; margin: auto; padding: 20px; }
         .card-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; padding: 20px; }
         .card { border-radius: 8px; padding: 15px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
         .severity-low { background-color: #e6f3e6; }
@@ -19,20 +19,20 @@
         details { cursor: pointer; }
     </style>
 </head>
-<body class="landing">
-    <div class="landing-navbar">
+     <!-- Navbar from landing.html -->
+     <div class="landing-navbar">
         <div class="landing-logo">
-            <img src="logo-placeholder.png" alt="Sentinel Logo" />
+            <img src="{{ url_for('static', filename='uploads/sentinel-black.png') }}" alt="Sentinel Logo">
             <h1>Sentinel</h1>
         </div>
         <div class="landing-nav-links">
-            <a href="leaderboard.html">Leaderboard</a>
-            <a href="guidelines.html">Guidelines</a>
-            <a href="faq.html">FAQ</a>
+            <a href="{{ url_for('main_bp.home') }}">Home</a>
+            <a href="{{ url_for('main_bp.guidelines') }}">Guidelines</a>
+            <a href="{{ url_for('main_bp.faq') }}">FAQ</a>
         </div>
     </div>
     
-    <div class="container">
+    <div class="public-container">
         <h1>Threat Intelligence Reports</h1>
         <div class="card-container">
             {% for threat in threats %}
