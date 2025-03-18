@@ -48,7 +48,18 @@ def public_threats():
 
 # ✅ Submit Threat Form Handler
 @main_bp.route('/submit-threat', methods=['POST'])
+@jwt_required(optional=True) 
 def submit_threat():
+    # Try to fetch user from the JWT that is coming in 
+    username = get_jwt_identity()
+    user = User.query.filter_by(username=username).first()
+    if user:
+            organization_id = user.organization_id
+            print("Organization ID:", organization_id)  # Debug print to check the organization_id
+    else:
+        print("User not found for username:", username)
+    print(username, user)
+        
     # 🔹 Validate Required Fields
     required_fields = ['threat_title', 'summary', 'detailed_description', 'impact_type', 'severity_level']
     for field in required_fields:
@@ -92,7 +103,8 @@ def submit_threat():
         impact_type=impact_type,
         severity_level=severity_level,
         mitigation_actions=mitigation_actions,
-        attachment_path=attachment_path
+        attachment_path=attachment_path,
+        username=username
     )
 
     # 🔹 Database Transaction Handling
@@ -104,7 +116,7 @@ def submit_threat():
         db.session.rollback()
         flash(f"Database error: {str(e)}", "danger")
 
-    return redirect(url_for('main.threat_reports'))
+    return redirect(url_for('main_bp.threat_reports'))
 
 # ✅ Route for FAQ Page
 @main_bp.route('/faq')
