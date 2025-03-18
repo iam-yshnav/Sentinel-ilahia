@@ -12,9 +12,9 @@ class Config:
 
     # Flask-JWT-Extended Configuration
     JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY") or "ith_vallya_jwt_secret_ann_pulle"  # Secret key for JWT
-    JWT_TOKEN_LOCATION = ["cookies"]  # Store JWT tokens in cookies
-    JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)  # Token expiration time (1 hour)
-    JWT_COOKIE_SECURE = False  # Set to True in production (HTTPS only)
-    JWT_COOKIE_CSRF_PROTECT = False  # Disable CSRF protection for simplicity
-    JWT_ACCESS_COOKIE_PATH = '/'  # Make the cookie available for all routes
-    JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=30)  # Refresh token expiration time (30 days)
+    JWT_TOKEN_LOCATION = ["cookies"]  
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)  
+    JWT_COOKIE_SECURE = False  
+    JWT_COOKIE_CSRF_PROTECT = False  
+    JWT_ACCESS_COOKIE_PATH = '/'  
+    JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=30)  
