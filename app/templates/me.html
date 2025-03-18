@@ -139,7 +139,8 @@
       color: #555;
       transition: color 0.3s ease;
     }
-    .submit-threat {
+    .submit-threat,
+    .submit-server-details {
       display: block;
       width: 100%;
       margin-top: 20px;
@@ -156,6 +157,16 @@
     }
     .submit-threat:hover {
       background: #b02a37;
+    }
+    .submit-server-details {
+      background: #28a745;
+    }
+    .submit-server-details:hover {
+      background: #218838;
+    }
+    .submit-server-details:disabled {
+      background: #6c757d;
+      cursor: not-allowed;
     }
     @media (max-width: 600px) {
       .header {
@@ -249,6 +260,36 @@
       </div>
     </div>
     <button class="submit-threat">Submit a Threat</button>
+    <button class="submit-server-details" id="submitServerDetails" disabled>Submit Server Details</button>
   </div>
+
+  <script>
+    // JavaScript to handle the "Submit a Threat" button click
+    document.addEventListener('DOMContentLoaded', function() {
+      const submitThreatButton = document.querySelector('.submit-threat');
+
+      submitThreatButton.addEventListener('click', function() {
+        // Redirect to the /threat route
+        window.location.href = "{{ url_for('main_bp.threat_reports') }}";
+      });
+
+      // JavaScript to handle the "Submit Server Details" button click
+      const submitServerDetailsButton = document.getElementById('submitServerDetails');
+
+      submitServerDetailsButton.addEventListener('click', function() {
+        // Redirect to the / route (org_bp.server)
+        window.location.href = "{{ url_for('org_bp.server') }}";
+      });
+
+      // JavaScript to enable/disable the "Submit Server Details" button based on user status
+      const userStatus = "{{ user.status }}"; // Assuming user.status is passed from the backend
+
+      if (userStatus === "approved") {
+        submitServerDetailsButton.disabled = false;
+      } else {
+        submitServerDetailsButton.disabled = true;
+      }
+    });
+  </script>
 </body>
 </html>
