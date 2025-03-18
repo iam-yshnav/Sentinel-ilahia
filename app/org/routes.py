@@ -7,8 +7,7 @@ from app.org import org_bp
 
 @org_bp.route('/')
 def server():
-    return render_template('server.html')
-
+    return render_template('add_asset.html')
 
 
 # Create Asset (Attach to an Organization)
@@ -16,9 +15,12 @@ def server():
 @jwt_required()
 def create_asset():
     data = request.get_json()
-    
-    if not data or 'server_name' not in data or 'organization_id' not in data:
-        return jsonify({"error": "Server name and organization ID are required"}), 400
+    username = get_jwt_identity()
+    print(f'{username} is trying to add an asset')
+    user = User.query.filter_by(username=username).first()  
+    org_id_user = user.organization_id
+
+    print(user, org_id_user)    
     
     org = Organization.query.get(data['organization_id'])
     if not org:
@@ -43,6 +45,9 @@ def create_asset():
     try:
         db.session.add(new_asset)
         db.session.commit()
+        
+        # Should also trigger a check and alert the user on the same
+        
         return jsonify({"message": "Asset created successfully", "asset_id": new_asset.id}), 201
     except Exception as e:
         db.session.rollback()

@@ -45,6 +45,7 @@ class ThreatReport(db.Model):
     __tablename__ = 'threat_reports'
 
     id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(200), default="unknown")
     threat_title = db.Column(db.String(300), nullable=False)
     summary = db.Column(db.Text)
     iocs = db.Column(db.Text)
