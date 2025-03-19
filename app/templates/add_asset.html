@@ -230,17 +230,17 @@
 </head>
 
 <body>
-    <nav class="landing-navbar">
+    <div class="landing-navbar">
         <div class="landing-logo">
-            <img src="logo-placeholder.png" alt="Sentinel Logo">
+            <img src="{{ url_for('static', filename='uploads/sentinel-black.png') }}" alt="Sentinel Logo">
             <h1>Sentinel</h1>
         </div>
         <div class="landing-nav-links">
-            <a href="leaderboard.html">Leaderboard</a>
-            <a href="guidelines.html">Guidelines</a>
-            <a href="faq.html">FAQ</a>
+            <a href="{{ url_for('main_bp.home') }}">Home</a>
+            <a href="{{ url_for('main_bp.guidelines') }}">Guidelines</a>
+            <a href="{{ url_for('main_bp.faq') }}">FAQ</a>
         </div>
-    </nav>
+    </div>
 
     <div class="container">
         <header class="header">

@@ -64,28 +64,29 @@ class ThreatReport(db.Model):
 
     def __repr__(self):
         return f'<ThreatReport {self.threat_title}>'
-
 class User(db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=True)  # For normal users
     password_hash = db.Column(db.String(255), nullable=False)
     token = db.Column(db.String(255), nullable=True)
-    role = db.Column(db.String(50), default='user')  # or 'admin'
+    role = db.Column(db.String(50), default='normal')  # Roles: 'normal', 'company', 'admin'
+    status = db.Column(db.String(20), default='pending')  # Status: 'pending', 'approved', 'revoked', 'banned'
 
-    # Additional user info
-    organization_id = db.Column(db.Integer, db.ForeignKey('organizations.id'), nullable=True)
-    # This needs to be amended by the admin, will put the checks later
-    
+    # Personal Details (Common for both normal and company users)
     name = db.Column(db.String(120), nullable=True)
     salutation = db.Column(db.String(50), nullable=True)
-    company = db.Column(db.String(120), nullable=True)
+
+    # Company-Specific Details (Only for company users)
+    organization_id = db.Column(db.Integer, db.ForeignKey('organizations.id'), nullable=True)
+    company = db.Column(db.String(120), nullable=True)  # Only if organization_id is not provided
     designation = db.Column(db.String(120), nullable=True)
     team = db.Column(db.String(120), nullable=True)
     domain = db.Column(db.String(120), nullable=True)
-    status = db.Column(db.String(20), default='pending')  
-    # Possible values: 'pending', 'approved', 'revoked', 'banned'
+
+    # Timestamps
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def set_password(self, password):

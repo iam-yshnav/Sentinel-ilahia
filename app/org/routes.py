@@ -10,18 +10,17 @@ def server():
     return render_template('add_asset.html')
 
 
-# Create Asset (Attach to an Organization)
 @org_bp.route('/create_asset', methods=['POST'])
 @jwt_required()
 def create_asset():
     data = request.get_json()
     username = get_jwt_identity()
-    print(f'{username} is trying to add an asset')
-    user = User.query.filter_by(username=username).first()  
-    org_id_user = user.organization_id
+    user = User.query.filter_by(username=username).first()
 
-    print(user, org_id_user)    
-    
+    # Ensure the user is a company user and belongs to the organization
+    if user.role != 'company' or user.organization_id != data['organization_id']:
+        return jsonify({"error": "Unauthorized"}), 403
+
     org = Organization.query.get(data['organization_id'])
     if not org:
         return jsonify({"error": "Invalid organization ID"}), 404
@@ -45,19 +44,22 @@ def create_asset():
     try:
         db.session.add(new_asset)
         db.session.commit()
-        
-        # Should also trigger a check and alert the user on the same
-        
         return jsonify({"message": "Asset created successfully", "asset_id": new_asset.id}), 201
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
 
 
-# Get All Assets for an Organization
 @org_bp.route('/organization/<int:org_id>/assets', methods=['GET'])
 @jwt_required()
 def get_assets_by_organization(org_id):
+    username = get_jwt_identity()
+    user = User.query.filter_by(username=username).first()
+
+    # Ensure the user belongs to the organization
+    if user.organization_id != org_id:
+        return jsonify({"error": "Unauthorized"}), 403
+
     org = Organization.query.get(org_id)
     if not org:
         return jsonify({"error": "Organization not found"}), 404
