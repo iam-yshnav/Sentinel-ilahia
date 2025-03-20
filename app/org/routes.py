@@ -7,19 +7,20 @@ from app.org import org_bp
 
 @org_bp.route('/')
 def server():
-    return render_template('server.html')
+    return render_template('add_asset.html')
 
 
-
-# Create Asset (Attach to an Organization)
 @org_bp.route('/create_asset', methods=['POST'])
 @jwt_required()
 def create_asset():
     data = request.get_json()
-    
-    if not data or 'server_name' not in data or 'organization_id' not in data:
-        return jsonify({"error": "Server name and organization ID are required"}), 400
-    
+    username = get_jwt_identity()
+    user = User.query.filter_by(username=username).first()
+
+    # Ensure the user is a company user and belongs to the organization
+    if user.role != 'company' or user.organization_id != data['organization_id']:
+        return jsonify({"error": "Unauthorized"}), 403
+
     org = Organization.query.get(data['organization_id'])
     if not org:
         return jsonify({"error": "Invalid organization ID"}), 404
@@ -49,10 +50,16 @@ def create_asset():
         return jsonify({"error": str(e)}), 500
 
 
-# Get All Assets for an Organization
 @org_bp.route('/organization/<int:org_id>/assets', methods=['GET'])
 @jwt_required()
 def get_assets_by_organization(org_id):
+    username = get_jwt_identity()
+    user = User.query.filter_by(username=username).first()
+
+    # Ensure the user belongs to the organization
+    if user.organization_id != org_id:
+        return jsonify({"error": "Unauthorized"}), 403
+
     org = Organization.query.get(org_id)
     if not org:
         return jsonify({"error": "Organization not found"}), 404

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="landing-navbar">
+        <div class="landing-logo">
+            <img src="{{ url_for('static', filename='uploads/sentinel-black.png') }}" alt="Sentinel Logo">
+            <h1>Sentinel-Login</h1>
+        </div>
+        <div class="landing-nav-links">
+            <a href="{{ url_for('main_bp.home') }}">Home</a>
+            <a href="{{ url_for('main_bp.guidelines') }}">Guidelines</a>
+            <a href="{{ url_for('auth_bp.login') }}">Login</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Left Panel -->
+        <aside class="left-panel">
+            <section class="instructions">
+                <h3>Why Register?</h3>
+                <ul>
+                    <li><strong>Access to Portal:</strong> Submit new threats and view existing submissions.</li>
+                    <li><strong>Collaboration:</strong> Collaborate with other analysts effectively.</li>
+                    <li><strong>Updates:</strong> Receive notifications on important threat intelligence.</li>
+                    <li><strong>Security:</strong> Protect your environment with real-time IOCs.</li>
+                </ul>
+            </section>
+        </aside>
+
+        <!-- Registration Form -->
+        <div class="form-card">
+            <h2>Create an Account</h2>
+            <form action="{{ url_for('auth_bp.userregister') }}" method="POST" class="submission-form">
+                <!-- Personal Details -->
+                <div class="form-group">
+                    <label for="name">Full Name *</label>
+                    <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="salutation">Salutation *</label>
+                    <input type="text" id="salutation" name="salutation" placeholder="Mr./Ms./Dr." required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="username">Username *</label>
+                    <input type="text" id="username" name="username" placeholder="Choose a username" required>
+                </div>
+
+                <!-- Password Fields -->
+                <div class="form-group">
+                    <label for="password">Password *</label>
+                    <input type="password" id="password" name="password" placeholder="Create a password" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password *</label>
+                    <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="submit" class="btn-submit">Register</button>
+                    <button type="reset" class="btn-reset">Clear</button>
+                </div>
+            </form>
+
+            <!-- Login Link -->
+            <p class="helper-text">
+                Already have an account? <a href="{{ url_for('auth_bp.login') }}">Login here</a>.
+            </p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Join our community and help build safer cyber environments.</p>
+    </footer>
+
+    <!-- Password Validation Script -->
+    <script>
+        document.querySelector(".submission-form").addEventListener("submit", function(event) {
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirm_password").value;
+
+            if (password !== confirmPassword) {
+                event.preventDefault();
+                alert("Passwords do not match!");
+            }
+        });
+    </script>
+</body>
+</html>

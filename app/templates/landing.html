@@ -6,18 +6,126 @@
     <title>Sentinel</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <style>
+        body {
+            background: #f8f9fa;
+            min-height: 100vh;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        .landing-container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .auth-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 80px;
+        }
+
+        .auth-card {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            text-align: center;
+            border-top: 4px solid transparent;
+        }
+
+        .user-card {
+            border-color: #3b82f6;
+        }
+
+        .company-card {
+            border-color: #10b981;
+        }
+
+        .auth-card h2 {
+            color: #1e293b;
+            font-size: 24px;
+            margin: 20px 0;
+            font-weight: 600;
+        }
+
+        .auth-card p {
+            color: #64748b;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .auth-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .auth-btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            border: 2px solid transparent;
+        }
+
+        .user-btn {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .user-btn:hover {
+            background: #2563eb;
+        }
+
+        .company-btn {
+            background: #10b981;
+            color: white;
+        }
+
+        .company-btn:hover {
+            background: #059669;
+        }
+
         .stay-logged-out-link {
             display: block;
-            margin-top: 100px;
+            margin: 60px auto 0;
             text-align: center;
-            font-size: 16px;
-            color: black;
-            text-decoration: underline;
-            cursor: pointer;
+            width: fit-content;
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 20px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .stay-logged-out-link:hover {
+            background: rgba(100, 116, 139, 0.1);
+            color: #3b82f6;
+        }
+
+        @media (max-width: 768px) {
+            .auth-sections {
+                grid-template-columns: 1fr;
+                margin-top: 40px;
+            }
+            
+            .auth-card {
+                padding: 30px;
+            }
+            
+            .landing-container {
+                margin: 30px auto;
+            }
         }
     </style>
 </head>
-    <!-- Navbar from landing.html -->
+<body>
+    <!-- Navbar remains unchanged -->
     <div class="landing-navbar">
         <div class="landing-logo">
             <img src="{{ url_for('static', filename='uploads/sentinel-black.png') }}" alt="Sentinel Logo">
@@ -29,39 +137,35 @@
             <a href="{{ url_for('main_bp.faq') }}">FAQ</a>
         </div>
     </div>
-    <div class="landing-container">
-        <h2>Are You a Bug Hunter?</h2>
-        <div class="landing-buttons">
-            <button class="landing-btn" onclick="window.location.href='auth/login'">Login</button>
-            <button class="landing-btn" onclick="window.location.href='auth/register'">Register</button>
-        </div>
-        <h2 style="margin-top: 60px;">Do You Need Our Service?</h2>
-        <div class="landing-buttons">
-            <button class="landing-btn" onclick="window.location.href='auth/companylogin'">Login</button>
-            <button class="landing-btn" onclick="window.location.href='register.html'">Register</button>
-        </div>
-        <a class="stay-logged-out-link" href="all">Stay Logged Out</a>
-    </div>
 
+    <div class="landing-container">
+        <div class="auth-sections">
+            <!-- Normal User Section -->
+            <div class="auth-card user-card">
+                <h2>Normal User</h2>
+                <p>Join our security community to report vulnerabilities and collaborate with organizations.</p>
+                <div class="auth-buttons">
+                    <a class="auth-btn user-btn" href="auth/login">Login</a>
+                    <a class="auth-btn user-btn" href="auth/register">Register</a>
+                </div>
+            </div>
+
+            <!-- Company Section -->
+            <div class="auth-card company-card">
+                <h2>Company</h2>
+                <p>Secure your organization by collaborating with our security experts and managing vulnerabilities.</p>
+                <div class="auth-buttons">
+                    <a class="auth-btn company-btn" href="auth/userregister">Company User Register</a>
+                </div>
+            </div>
+        </div>
+
+        <a class="stay-logged-out-link" href="all">
+            Explore Public Threats Without Login
+        </a>
+    </div>
     <div class="landing-footer">
-        <div class="landing-extra-content">
-            <div class="landing-card">
-                <h3>Recent Bug</h3>
-                <p>Cross-Site Scripting in Example.com - $200 Reward</p>
-            </div>
-            <div class="landing-card">
-                <h3>Top Hunter</h3>
-                <p>Jane Doe - $1200 Rewards Earned</p>
-            </div>
-            <div class="landing-card">
-                <h3>Platform Stats</h3>
-                <p>500+ Bugs Reported</p>
-                <p>$50,000 Rewards Distributed</p>
-            </div>
-        </div>
-        <div>
-            &copy; 2025 Sentinel - All Rights Reserved
-        </div>
+        <p>&copy; <span id="current-year"></span> Sentinel. All rights reserved.</p>
     </div>
 </body>
 </html>
