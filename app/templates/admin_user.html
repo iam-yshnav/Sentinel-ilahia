@@ -54,48 +54,137 @@
         .revoke-btn { background-color: #f39c12; color: white; }
         .ban-btn { background-color: #e74c3c; color: white; }
     </style>
+    
+ <div class="header">
+    <h1>Manage Users</h1>
+</div>
 
-    <div class="header">
-        <h1>Manage Users</h1>
-    </div>
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Role</th>
-                    <th>Status</th>
-                    <th>Organization</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in users %}
-                <tr>
-                    <td>{{ user.id }}</td>
-                    <td>{{ user.name }}</td>
-                    <td>{{ user.role }}</td>
-                    <td>{{ user.status }}</td>
-                    <td>{{ user.organization.name if user.organization else "None" }}</td>
-                    <td>
-                        <form method="POST" action="{{ url_for('admin.approve_user') }}" style="display:inline;">
-                            <input type="hidden" name="user_id" value="{{ user.id }}">
-                            <input type="hidden" name="organization_id" value="{{ user.organization.id if user.organization else '' }}">
-                            <button class="btn approve-btn" type="submit">Approve</button>
-                        </form>
-                        <form method="POST" action="{{ url_for('admin.revoke_user') }}" style="display:inline;">
-                            <input type="hidden" name="user_id" value="{{ user.id }}">
-                            <button class="btn revoke-btn" type="submit">Revoke</button>
-                        </form>
-                        <form method="POST" action="{{ url_for('admin.ban_user') }}" style="display:inline;">
-                            <input type="hidden" name="user_id" value="{{ user.id }}">
-                            <button class="btn ban-btn" type="submit">Ban</button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+<!-- Admin Users Table -->
+<div class="table-container">
+    <h2>Admin Users</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Organization</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in admin_users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.role }}</td>
+                <td>{{ user.status }}</td>
+                <td>{{ user.organization.name if user.organization else "None" }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('admin.approve_user') }}" style="display:inline;">
+                        <input type="hidden" name="user_id" value="{{ user.id }}">
+                        <input type="hidden" name="organization_id" value="{{ user.organization.id if user.organization else '' }}">
+                        <button class="btn approve-btn" type="submit">Approve</button>
+                    </form>
+                    <form method="POST" action="{{ url_for('admin.revoke_user') }}" style="display:inline;">
+                        <input type="hidden" name="user_id" value="{{ user.id }}">
+                        <button class="btn revoke-btn" type="submit">Revoke</button>
+                    </form>
+                    <form method="POST" action="{{ url_for('admin.ban_user') }}" style="display:inline;">
+                        <input type="hidden" name="user_id" value="{{ user.id }}">
+                        <button class="btn ban-btn" type="submit">Ban</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Company Users Table -->
+<div class="table-container">
+    <h2>Company Users</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Organization</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in company_users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.role }}</td>
+                <td>{{ user.status }}</td>
+                <td>{{ user.organization.name if user.organization else "None" }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('admin.approve_user') }}" style="display:inline;">
+                        <input type="hidden" name="user_id" value="{{ user.id }}">
+                        <input type="hidden" name="organization_id" value="{{ user.organization.id if user.organization else '' }}">
+                        <button class="btn approve-btn" type="submit">Approve</button>
+                    </form>
+                    <form method="POST" action="{{ url_for('admin.revoke_user') }}" style="display:inline;">
+                        <input type="hidden" name="user_id" value="{{ user.id }}">
+                        <button class="btn revoke-btn" type="submit">Revoke</button>
+                    </form>
+                    <form method="POST" action="{{ url_for('admin.ban_user') }}" style="display:inline;">
+                        <input type="hidden" name="user_id" value="{{ user.id }}">
+                        <button class="btn ban-btn" type="submit">Ban</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Normal Users Table -->
+<div class="table-container">
+    <h2>Normal Users</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Organization</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in normal_users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.role }}</td>
+                <td>{{ user.status }}</td>
+                <td>{{ user.organization.name if user.organization else "None" }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('admin.approve_user') }}" style="display:inline;">
+                        <input type="hidden" name="user_id" value="{{ user.id }}">
+                        <input type="hidden" name="organization_id" value="{{ user.organization.id if user.organization else '' }}">
+                        <button class="btn approve-btn" type="submit">Approve</button>
+                    </form>
+                    <form method="POST" action="{{ url_for('admin.revoke_user') }}" style="display:inline;">
+                        <input type="hidden" name="user_id" value="{{ user.id }}">
+                        <button class="btn revoke-btn" type="submit">Revoke</button>
+                    </form>
+                    <form method="POST" action="{{ url_for('admin.ban_user') }}" style="display:inline;">
+                        <input type="hidden" name="user_id" value="{{ user.id }}">
+                        <button class="btn ban-btn" type="submit">Ban</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}

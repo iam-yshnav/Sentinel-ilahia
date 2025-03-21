@@ -21,7 +21,7 @@ class Asset(db.Model):
     __tablename__ = 'assets'
 
     id = db.Column(db.Integer, primary_key=True)
-    asset_name = db.Column(db.String(200), nullable=False)
+    server_name = db.Column(db.String(200), nullable=False)
     os_name = db.Column(db.String(100), nullable=False)
     os_version = db.Column(db.String(50), nullable=False)
     ip_address = db.Column(db.String(45), nullable=False, index=True)  # IPv4 & IPv6
@@ -97,3 +97,8 @@ class User(db.Model):
 
     def __repr__(self):
         return f'<User {self.username}>'
+    
+    def get_default_organization(self):
+        if self.role == 'normal':
+            return Organization.query.filter_by(name='Individual Users').first()
+        return self.organization

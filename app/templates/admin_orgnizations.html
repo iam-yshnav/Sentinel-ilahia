@@ -89,8 +89,8 @@
     </style>
 
     <!-- Main Content: Left Pane = List Organizations, Right Pane = Add Organization -->
-   
-        <!-- Left Pane: List Organizations with Delete Option -->
+    <div class="main-content">
+        <!-- Left Pane: List Organizations with Ban/Deban Options -->
         <div class="left-pane">
             <h1>Organizations</h1>
             <table>
@@ -98,6 +98,7 @@
                     <tr>
                         <th>Name</th>
                         <th>Industry</th>
+                        <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -106,19 +107,37 @@
                     <tr>
                         <td>{{ organization.name }}</td>
                         <td>{{ organization.industry }}</td>
+                        <td>{{ "Banned" if organization.is_banned else "Active" }}</td>
                         <td>
-                            <form
-                                action="/admin/orgs/ban/{{ organization.id }}"
-                                method="post"
-                                onsubmit="return confirm('Are you sure you want to ban this organization?');"
-                            >
-                                <button
-                                    type="submit"
-                                    class="btn delete-btn"
+                            {% if organization.is_banned %}
+                                <!-- Deban Form -->
+                                <form
+                                    action="/admin/orgs/deban/{{ organization.id }}"
+                                    method="post"
+                                    onsubmit="return confirm('Unban this organization?');"
                                 >
-                                    Ban
-                                </button>
-                            </form>
+                                    <button
+                                        type="submit"
+                                        class="btn add-btn"
+                                    >
+                                        Deban
+                                    </button>
+                                </form>
+                            {% else %}
+                                <!-- Ban Form -->
+                                <form
+                                    action="/admin/orgs/ban/{{ organization.id }}"
+                                    method="post"
+                                    onsubmit="return confirm('Are you sure you want to ban this organization?');"
+                                >
+                                    <button
+                                        type="submit"
+                                        class="btn delete-btn"
+                                    >
+                                        Ban
+                                    </button>
+                                </form>
+                            {% endif %}
                         </td>
                     </tr>
                     {% endfor %}
@@ -153,5 +172,5 @@
                 </button>
             </form>
         </div>
-    
+    </div>
 {% endblock %}

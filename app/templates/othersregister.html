@@ -64,6 +64,8 @@
                     <label for="password">Password *</label>
                     <input type="password" id="password" name="password" placeholder="Create a password" required>
                 </div>
+                <!-- Add this right before the password fields -->
+                <!-- <input type="hidden" name="organization_id" value="{{ default_org.id }}"> -->
 
                 <div class="form-group">
                     <label for="confirm_password">Confirm Password *</label>
@@ -75,6 +77,9 @@
                     <button type="submit" class="btn-submit">Register</button>
                     <button type="reset" class="btn-reset">Clear</button>
                 </div>
+                <!-- In all approval forms, modify the organization_id input -->
+                <!-- <input type="hidden" name="organization_id" 
+                value="{% if user.organization %}{{ user.organization.id }}{% else %}{{ default_org.id }}{% endif %}"> -->
             </form>
 
             <!-- Login Link -->

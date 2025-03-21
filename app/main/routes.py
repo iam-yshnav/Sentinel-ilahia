@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, url_for, flash, jsonify, current_app
 from werkzeug.utils import secure_filename
 from functools import wraps
-from app.models import User, ThreatReport
+from app.models import Asset, User, ThreatReport
 import os
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from app import db
@@ -32,13 +32,32 @@ def threat_reports():
 @main_bp.route('/me', methods=['GET'])
 @jwt_required()
 def about_me():
-    user_name = get_jwt_identity()    
-    print(user_name)
+    user_name = get_jwt_identity()
     user = User.query.filter_by(username=user_name).first()
-    if not user:
-        return "The user was not found", 404 # TODO : Handle this case here
 
-    return render_template("me.html", user=user)
+    if not user:
+        return "The user was not found", 404
+
+    # Fetch threats submitted by the logged-in user
+    user_threats = ThreatReport.query.filter_by(username=user_name).all()
+
+    # Fetch assets submitted by the logged-in user
+    user_assets = Asset.query.filter_by(organization_id=user.organization_id).all()
+
+    # Fetch threats related to the user's assets
+    asset_threats = []
+    for asset in user_assets:
+        threats = ThreatReport.query.filter_by(affected_service=asset.service_name).all()
+        asset_threats.extend(threats)
+
+    return render_template(
+        "me.html",
+        user=user,
+        user_threats=user_threats,
+        user_assets=user_assets,
+        asset_threats=asset_threats
+    )
+
 
 # ✅ Route for Public Threat View
 @main_bp.route('/all', methods=['GET'])

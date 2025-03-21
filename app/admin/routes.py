@@ -118,35 +118,69 @@ def deban_organization(org_id):
             flash(f"Error unbanning organization: {e}", "danger")
     return redirect(url_for('admin.add_organization'))
 
-### 👥 User Management ###
 
+### 👥 User Management ###
 @admin_bp.route('/users')
 def admin_users():
-    users = User.query.all()
-    return render_template('admin_user.html', users=users)
+    # Ensure default organization exists for normal users
+    default_org = Organization.query.filter_by(name='Individual Users').first()
+    if not default_org:
+        default_org = Organization(
+            name='Individual Users', 
+            industry='General',
+            is_banned=False
+        )
+        db.session.add(default_org)
+        try:
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Error creating default organization: {e}", "danger")
+
+    # Get users sorted by role
+    return render_template(
+        'admin_user.html',
+        admin_users=User.query.filter_by(role='admin').all(),
+        company_users=User.query.filter_by(role='company').all(),
+        normal_users=User.query.filter_by(role='normal').all(),
+        default_org=default_org
+    )
 
 @admin_bp.route('/admin/user/approve', methods=['POST'])
 def approve_user():
     user_id = request.form.get('user_id')
-    organization_id = request.form.get('organization_id')
+    user = User.query.get_or_404(user_id)
+    
+    # Organization handling based on role
+    if user.role == 'company':
+        org_id = request.form.get('organization_id')
+        organization = Organization.query.get(org_id)
+        if not organization:
+            flash("Company organization not found", "danger")
+            return redirect(url_for('admin.admin_users'))
+            
+    elif user.role == 'normal':
+        organization = Organization.query.filter_by(name='Individual Users').first()
+        if not organization:
+            flash("Default organization missing! Contact admin", "danger")
+            return redirect(url_for('admin.admin_users'))
+            
+    else:  # admin
+        organization = None
 
-    user = User.query.get(user_id)
-    if not user:
-        flash("User not found.", "danger")
-        return redirect(url_for('admin.admin_users'))
-
-    organization = Organization.query.get(organization_id)
-    if not organization:
-        flash("Organization not found.", "danger")
-        return redirect(url_for('admin.admin_users'))
-
-    if user.organization_id == organization_id and user.status == "approved":
-        flash("User is already approved for this organization.", "warning")
+    # Update user state
+    if user.status == 'approved':
+        flash(f"{user.role.capitalize()} user already approved", "warning")
     else:
-        user.organization_id = organization_id
-        user.status = "approved"
-        db.session.commit()
-        flash(f"User {user_id} approved successfully!", "success")
+        try:
+            if user.role != 'admin':
+                user.organization = organization
+            user.status = 'approved'
+            db.session.commit()
+            flash(f"{user.role.capitalize()} user approved successfully", "success")
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Approval failed: {str(e)}", "danger")
 
     return redirect(url_for('admin.admin_users'))
 

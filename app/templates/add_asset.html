@@ -228,7 +228,6 @@
         }
     </style>
 </head>
-
 <body>
     <div class="landing-navbar">
         <div class="landing-logo">
@@ -242,86 +241,90 @@
         </div>
     </div>
 
+    <!-- Flash Messages -->
+    <div id="flash-messages">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message flash-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
     <div class="container">
         <header class="header">
             <h1>Server Configuration Manager</h1>
             <p>Register your server infrastructure details securely</p>
         </header>
 
-        <form class="server-form">
+        <form id="assetForm" class="server-form" method="POST" action="{{ url_for('org_bp.create_asset') }}">
+            <input type="hidden" name="organization_id" value="{{ org_id }}">
+
             <div class="form-row">
                 <div class="form-group">
-                    <label for="asset_name">Asset Name</label>
-                    <input type="text" id="asset_name" placeholder="e.g., Web Server 1" required>
+                    <label for="server_name">Server Name</label>
+                    <input type="text" id="server_name" name="server_name" placeholder="e.g., Web Server 1" required>
                 </div>
                 <div class="form-group">
                     <label for="ip_address">IP Address</label>
-                    <input type="text" id="ip_address" placeholder="192.168.1.1" required>
+                    <input type="text" id="ip_address" name="ip_address" placeholder="192.168.1.1" required>
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label for="os_name">Operating System</label>
-                    <input type="text" id="os_name" placeholder="e.g., Ubuntu 22.04 LTS" required>
+                    <input type="text" id="os_name" name="os_name" placeholder="e.g., Ubuntu 22.04 LTS" required>
                 </div>
-                <div class="form-group">
-                    <label for="os_version">OS Version</label>
-                    <input type="text" id="os_version" placeholder="e.g., 22.04" required>
-                </div>
-            </div>
-
-            <div class="form-row">
                 <div class="form-group">
                     <label for="service_name">Service Name</label>
-                    <input type="text" id="service_name" placeholder="e.g., Apache HTTP Server">
-                </div>
-                <div class="form-group">
-                    <label for="service_version">Service Version</label>
-                    <input type="text" id="service_version" placeholder="e.g., 2.4.41">
+                    <input type="text" id="service_name" name="service_name" placeholder="e.g., Apache HTTP Server">
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="server_purpose">Server Purpose</label>
-                    <input type="text" id="server_purpose" placeholder="e.g., Database Server" required>
+                    <label for="service_version">Service Version</label>
+                    <input type="text" id="service_version" name="service_version" placeholder="e.g., 2.4.41">
                 </div>
                 <div class="form-group">
-                    <label for="organization_id">Organization ID</label>
-                    <input type="number" id="organization_id" placeholder="e.g., 101" required>
+                    <label for="server_purpose">Server Purpose</label>
+                    <input type="text" id="server_purpose" name="server_purpose" placeholder="e.g., Database Server" required>
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label for="cpu_configuration">CPU Configuration (Cores)</label>
-                    <input type="number" id="cpu_configuration" placeholder="e.g., 8" required>
+                    <input type="number" id="cpu_configuration" name="cpu_configuration" placeholder="e.g., 8" required>
                 </div>
                 <div class="form-group">
                     <label for="ram_capacity">RAM Capacity (GB)</label>
-                    <input type="number" id="ram_capacity" placeholder="e.g., 32" required>
+                    <input type="number" id="ram_capacity" name="ram_capacity" placeholder="e.g., 32" required>
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="storage_configuration">Storage Configuration</label>
-                <textarea id="storage_configuration" rows="3" placeholder="e.g., Disk 1: 500GB SSD, Disk 2: 2TB HDD"></textarea>
+                <textarea id="storage_configuration" name="storage_configuration" rows="3" placeholder="e.g., Disk 1: 500GB SSD, Disk 2: 2TB HDD"></textarea>
             </div>
 
             <div class="form-group">
                 <label for="network_configuration">Network Configuration</label>
-                <textarea id="network_configuration" rows="3" placeholder="e.g., VLAN: 102, Ports Open: 80, 443"></textarea>
+                <textarea id="network_configuration" name="network_configuration" rows="3" placeholder="e.g., VLAN: 102, Ports Open: 80, 443"></textarea>
             </div>
 
             <div class="form-group">
                 <label for="security_protocols">Security Protocols</label>
-                <textarea id="security_protocols" rows="2" placeholder="e.g., Firewall enabled, SSH key authentication"></textarea>
+                <textarea id="security_protocols" name="security_protocols" rows="2" placeholder="e.g., Firewall enabled, SSH key authentication"></textarea>
             </div>
 
             <div class="form-group">
                 <label for="admin_contact">Admin Contact</label>
-                <input type="email" id="admin_contact" placeholder="admin@company.com" required>
+                <input type="email" id="admin_contact" name="admin_contact" placeholder="admin@company.com" required>
             </div>
 
             <div class="btn-group">
@@ -330,6 +333,29 @@
             </div>
         </form>
     </div>
+
+    <script>
+      document.getElementById('assetForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    const response = await fetch("{{ url_for('org_bp.create_asset') }}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(Object.fromEntries(formData))
+    });
+
+    const result = await response.json();
+    if (response.ok) {
+        alert(result.message);
+        window.location.href = "{{ url_for('main_bp.about_me') }}"; // Redirect to the 'me' route
+    } else {
+        alert(result.error);
+    }
+});
+    </script>
 </body>
 
 </html>

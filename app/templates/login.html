@@ -87,7 +87,7 @@
             <!-- Right Panel -->
             <div class="form-card">
                 <h2>Login</h2>
-                <form action="{{ url_for('auth_bp.login') }}" method="POST" class="submission-form">
+                <form method="POST" action="{{ url_for('auth_bp.login') }}">
                     <div class="form-group">
                         <label for="username">Username or Email</label>
                         <input 
