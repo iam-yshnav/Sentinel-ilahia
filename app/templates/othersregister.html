@@ -5,23 +5,200 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f4f8;
+            color: #333;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-logo img {
+            height: 40px;
+        }
+
+        .navbar-logo h1 {
+            display: inline;
+            margin-left: 10px;
+            font-size: 1.5rem;
+        }
+
+        .navbar-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 1rem;
+        }
+
+        .navbar-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* Main Content */
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        /* Left Panel - Why Register? */
+        .left-panel {
+            flex: 1;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .left-panel h3 {
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+
+        .left-panel ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .left-panel ul li {
+            margin-bottom: 10px;
+        }
+
+        /* Registration Form */
+        .form-card {
+            flex: 2;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-card h2 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-submit, .btn-reset {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-submit {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-submit:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-reset {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-reset:hover {
+            background-color: #5a6268;
+        }
+
+        .helper-text {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .helper-text a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .helper-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .navbar-links {
+                margin-top: 10px;
+            }
+
+            .left-panel, .form-card {
+                margin: 5px 0;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="landing-navbar">
-        <div class="landing-logo">
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-logo">
             <img src="{{ url_for('static', filename='uploads/sentinel-black.png') }}" alt="Sentinel Logo">
             <h1>Sentinel-Login</h1>
         </div>
-        <div class="landing-nav-links">
+        <div class="navbar-links">
             <a href="{{ url_for('main_bp.home') }}">Home</a>
             <a href="{{ url_for('main_bp.guidelines') }}">Guidelines</a>
             <a href="{{ url_for('auth_bp.login') }}">Login</a>
         </div>
-    </div>
+    </nav>
 
     <!-- Main Content -->
     <main class="container">
-        <!-- Left Panel -->
+        <!-- Left Panel - Why Register? -->
         <aside class="left-panel">
             <section class="instructions">
                 <h3>Why Register?</h3>
@@ -38,46 +215,35 @@
         <div class="form-card">
             <h2>Create an Account</h2>
             <form action="{{ url_for('auth_bp.userregister') }}" method="POST" class="submission-form">
-                <!-- Personal Details -->
                 <div class="form-group">
                     <label for="name">Full Name *</label>
                     <input type="text" id="name" name="name" placeholder="Enter your full name" required>
                 </div>
-
                 <div class="form-group">
                     <label for="salutation">Salutation *</label>
                     <input type="text" id="salutation" name="salutation" placeholder="Mr./Ms./Dr." required>
                 </div>
-
                 <div class="form-group">
                     <label for="email">Email Address *</label>
                     <input type="email" id="email" name="email" placeholder="Enter your email" required>
                 </div>
-
                 <div class="form-group">
                     <label for="username">Username *</label>
                     <input type="text" id="username" name="username" placeholder="Choose a username" required>
                 </div>
-
-                <!-- Password Fields -->
                 <div class="form-group">
                     <label for="password">Password *</label>
                     <input type="password" id="password" name="password" placeholder="Create a password" required>
                 </div>
-
                 <div class="form-group">
                     <label for="confirm_password">Confirm Password *</label>
                     <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
                 </div>
-
-                <!-- Form Actions -->
                 <div class="form-actions">
                     <button type="submit" class="btn-submit">Register</button>
                     <button type="reset" class="btn-reset">Clear</button>
                 </div>
             </form>
-
-            <!-- Login Link -->
             <p class="helper-text">
                 Already have an account? <a href="{{ url_for('auth_bp.login') }}">Login here</a>.
             </p>
