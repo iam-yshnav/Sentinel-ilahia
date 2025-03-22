@@ -3,242 +3,225 @@
 {% block title %}Admin - Manage Users{% endblock %}
 
 {% block content %}
-        <style>
-            /* Global Styles */
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-                font-family: "Poppins", sans-serif;
-            }
+<style>
+    /* Global Styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+    }
 
-            body {
-                display: flex;
-                background-color: #f4f4f4;
-            }
+    body {
+        display: flex;
+        background-color: #f4f4f4;
+    }
 
-            .header {
-                background-color: white;
-                padding: 20px;
-                border-radius: 8px;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            }
+    .header {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
 
-            .header h1 {
-                font-size: 24px;
-            }
+    .header h1 {
+        font-size: 24px;
+    }
 
-            /* Dashboard Cards */
-            .dashboard {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-                gap: 20px;
-                margin-top: 20px;
-            }
+    /* Dashboard Cards */
+    .dashboard {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
 
-            .card {
-                background: white;
-                padding: 20px;
-                border-radius: 10px;
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-                transition: transform 0.3s ease;
-            }
+    .card {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
 
-            .card:hover {
-                transform: scale(1.03);
-            }
+    .card:hover {
+        transform: scale(1.03);
+    }
 
-            .card h3 {
-                font-size: 18px;
-                margin-bottom: 10px;
-            }
+    .card h3 {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
 
-            /* Table Styles */
-            .table-container {
-                margin-top: 20px;
-                overflow-x: auto;
-                background: white;
-                padding: 20px;
-                border-radius: 10px;
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            }
+    /* Table Styles */
+    .table-container {
+        margin-top: 20px;
+        overflow-x: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
 
-            table {
-                width: 100%;
-                border-collapse: collapse;
-            }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
 
-            table th,
-            table td {
-                padding: 12px;
-                text-align: left;
-                border-bottom: 1px solid #ddd;
-            }
+    table th,
+    table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
 
-            table th {
-                background: #1abc9c;
-                color: white;
-            }
+    table th {
+        background: #1abc9c;
+        color: white;
+    }
 
-            table tr:hover {
-                background: #e8f6f3;
-            }
+    table tr:hover {
+        background: #e8f6f3;
+    }
 
-            /* Buttons */
-            .btn {
-                padding: 8px 15px;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                font-size: 14px;
-            }
+    /* Deleted Threats Table Specific Styles */
+    .deleted-threats-table tr {
+        background-color: #f8d7da; /* Light red background for deleted threats */
+    }
 
-            .approve-btn {
-                background-color: #27ae60;
-                color: white;
-            }
+    .deleted-threats-table tr:hover {
+        background-color: #f5c6cb; /* Slightly darker red on hover */
+    }
 
-            .reject-btn {
-                background-color: #e74c3c;
-                color: white;
-            }
+    /* Buttons */
+    .btn {
+        padding: 8px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        margin: 2px;
+    }
 
-            .delete-btn {
-                background-color: #e74c3c;
-                color: white;
-            }
-            .retain-btn {
-                background-color: #3498db;
-                color: white;
-            }
+    .approve-btn {
+        background-color: #27ae60;
+        color: white;
+    }
 
-            /* Responsive Design */
-            @media (max-width: 768px) {
+    .reject-btn {
+        background-color: #e74c3c;
+        color: white;
+    }
 
-                .dashboard {
-                    grid-template-columns: 1fr;
-                }
-            }
-        </style>
- 
-        
+    .delete-btn {
+        background-color: #e74c3c;
+        color: white;
+    }
 
-        <!-- Main Content -->
-       
-            <div class="header">
-                <h1>Admin Dashboard</h1>
-            </div>
+    .retain-btn {
+        background-color: #3498db;
+        color: white;
+    }
 
-            <!-- Dashboard Cards -->
-            <div class="dashboard">
-                <div class="card">
-                    <h3>Total Threats: {{ threats|length }}</h3>
-                </div>
-                <div class="card">
-                    <h3>Registered Users: {{ users|length }}</h3>
-                </div>
-            </div>
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .dashboard {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
 
-            <!-- Threat Reports Table -->
-            <div class="table-container">
-                <h3>Threat Reports</h3>
-                <!-- Add this to the Threat Reports table -->
-                <h2>Active Threats</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Summary</th>
-                            <th>Approved</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for threat in threats %}
-                        <tr>
-                            <td>{{ threat.threat_title }}</td>
-                            <td>{{ threat.summary | default('N/A') }}</td>
-                            <td>{{ 'Yes' if threat.approved else 'No' }}</td>
-                            <td>
-                                <form
-                                    action="{{ url_for('admin.approve_threat', threat_id=threat.id) }}"
-                                    method="post"
-                                    style="display: inline"
-                                >
-                                    <button
-                                        type="submit"
-                                        class="btn approve-btn"
-                                    >
-                                        Approve
-                                    </button>
-                                </form>
-                                <form
-                                    action="{{ url_for('admin.reject_threat', threat_id=threat.id) }}"
-                                    method="post"
-                                    style="display: inline"
-                                >
-                                    <button
-                                        type="submit"
-                                        class="btn reject-btn"
-                                    >
-                                        Reject
-                                    </button>
-                                </form>
-                                <form
-                                    action="{{ url_for('admin.delete_threat', threat_id=threat.id) }}"
-                                    method="post"
-                                    style="display: inline"
-                                >
-                                    <button
-                                        type="submit"
-                                        class="btn delete-btn"
-                                    >
-                                        Delete
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+<!-- Main Content -->
+<div class="header">
+    <h1>Admin Dashboard</h1>
+</div>
 
-                <!-- Deleted Threats -->
-                <h2>Deleted Threats</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Summary</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for threat in deleted_threats %}
-                        <tr>
-                            <td>{{ threat.threat_title }}</td>
-                            <td>{{ threat.summary or 'N/A' }}</td>
-                            <td>
-                                <form
-                                    action="{{ url_for('admin.retain_threat', threat_id=threat.id) }}"
-                                    method="post"
-                                    style="display: inline"
-                                >
-                                    <button
-                                        type="submit"
-                                        class="btn retain-btn"
-                                    >
-                                        Retain
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+<!-- Dashboard Cards -->
+<div class="dashboard">
+    <div class="card">
+        <h3>Total Threats: {{ threats|length }}</h3>
+    </div>
+    <div class="card">
+        <h3>Registered Users: {{ users|length }}</h3>
+    </div>
+</div>
 
-            
+<!-- Threat Reports Table -->
+<div class="table-container">
+    <h3>Threat Reports</h3>
+
+    <!-- Active Threats Table -->
+    <h2>Active Threats</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Submitted By</th>
+                <th>Summary</th>
+                <th>Severity</th>
+                <th>Platforms Affected</th>
+                <th>Impact Type</th>
+                <th>IOCs</th>
+                <th>Created At</th>
+                <th>Approved</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for threat in threats %}
+            <tr>
+                <td>{{ threat.threat_title }}</td>
+                <td>{{ threat.username | default('Unknown') }}</td>
+                <td>{{ threat.summary | default('N/A') }}</td>
+                <td>{{ threat.severity_level | default('N/A') }}</td>
+                <td>{{ threat.affected_platforms | default('N/A') }}</td>
+                <td>{{ threat.impact_type | default('N/A') }}</td>
+                <td>{{ threat.iocs | default('N/A') }}</td>
+                <td>{{ threat.created_at.strftime('%Y-%m-%d %H:%M') if threat.created_at else 'N/A' }}</td>
+                <td>{{ 'Yes' if threat.approved else 'No' }}</td>
+                <td>
+                    <form action="{{ url_for('admin.approve_threat', threat_id=threat.id) }}" method="post" style="display: inline">
+                        <button type="submit" class="btn approve-btn">Approve</button>
+                    </form>
+                    <form action="{{ url_for('admin.reject_threat', threat_id=threat.id) }}" method="post" style="display: inline">
+                        <button type="submit" class="btn reject-btn">Reject</button>
+                    </form>
+                    <form action="{{ url_for('admin.delete_threat', threat_id=threat.id) }}" method="post" style="display: inline">
+                        <button type="submit" class="btn delete-btn">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Deleted Threats Table -->
+    <h2>Deleted Threats</h2>
+    <table class="deleted-threats-table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Summary</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for threat in deleted_threats %}
+            <tr>
+                <td>{{ threat.threat_title }}</td>
+                <td>{{ threat.summary or 'N/A' }}</td>
+                <td>
+                    <form action="{{ url_for('admin.retain_threat', threat_id=threat.id) }}" method="post" style="display: inline">
+                        <button type="submit" class="btn retain-btn">Retain</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}
