@@ -6,11 +6,53 @@
     <title>Threat Submission Portal</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
+<style>
+    .back-button-container {
+    margin-left: auto; /* Aligns the button to the right */
+}
+
+.back-button {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}
+.flash-messages {
+    margin-bottom: 20px;
+}
+.alert {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+.alert-error {
+    background-color: #ffebee;
+    color: #c62828;
+}
+.alert-success {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+</style>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <h1>Threat Submission Portal</h1>
-    </header>
+
+    <div class="landing-navbar">
+        <div class="landing-logo">
+            <img src="{{ url_for('static', filename='uploads/sentinel-black.png') }}" alt="Sentinel Logo">
+            <h1>Sentinel</h1>
+        </div>
+
+        <div class="back-button-container">
+            <a href="{{ url_for('main_bp.about_me') }}" class="back-button">Back</a>
+        </div>
+    </div>
 
     <!-- Main Content -->
     <main class="container">
@@ -31,6 +73,19 @@
                 </section>
                 
             </aside>
+            <!-- flah messgae -->
+    <div class="flash-messages">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+    
 
             <!-- Right Panel -->
             <div class="form-card">

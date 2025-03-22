@@ -255,11 +255,6 @@
     </div>
 
     <div class="container">
-        <header class="header">
-            <h1>Server Configuration Manager</h1>
-            <p>Register your server infrastructure details securely</p>
-        </header>
-
         <form id="assetForm" class="server-form" method="POST" action="{{ url_for('org_bp.create_asset') }}">
             <input type="hidden" name="organization_id" value="{{ org_id }}">
 

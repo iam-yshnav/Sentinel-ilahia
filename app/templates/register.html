@@ -6,6 +6,24 @@
     <title>Registration</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
+<style>
+    .flash-messages {
+    margin-bottom: 20px;
+}
+.alert {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+.alert-error {
+    background-color: #ffebee;
+    color: #c62828;
+}
+.alert-success {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+</style>
 <body>
     <div class="landing-navbar">
         <div class="landing-logo">
@@ -18,12 +36,23 @@
             <a href="{{ url_for('auth_bp.login') }}">Login</a>
         </div>
     </div>
-
+    <div class="flash-messages">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
     <!-- Main Content -->
     <main class="container">
         <div class="layout">
+      
             <!-- Left Panel -->
-            <aside class="left-panel">
+            <aside class="left-panel">        
                 <section class="instructions">
                     <h3>Why Register?</h3>
                     <ul>
@@ -34,7 +63,7 @@
                     </ul>
                 </section>
             </aside>
-
+            
             <!-- Right Panel -->
             <div class="form-card">
                 <h2>Create an Account</h2>

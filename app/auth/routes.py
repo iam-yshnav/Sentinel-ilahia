@@ -108,17 +108,16 @@ def userregister():
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form.get('username')
+        username_or_email = request.form.get('username_or_email')
         password = request.form.get('password')
-        user = User.query.filter_by(username=username).first()
+        user = User.query.filter((User.username == username_or_email) | (User.email == username_or_email)).first()
 
         if user and user.check_password(password):
             if user.status != 'approved':
                 flash("Your account is pending approval. Please contact the admin.", "error")
                 return redirect(url_for('auth_bp.login'))
 
-            # Generate a token and store it
-            access_token = create_access_token(identity=username)
+            access_token = create_access_token(identity=user.username)
             resp = make_response(redirect(url_for('main_bp.about_me')))  # TODO: Change this in the near future
             set_access_cookies(resp, access_token)
             return resp
