@@ -7,6 +7,8 @@ from flask_jwt_extended import get_jwt_identity, jwt_required
 from app import db
 from app.main import main_bp
 
+from .comp import add_vulnerable_assets_to_threat_intel
+
 # ✅ Admin Authentication Decorator
 def admin_required(f):
     @wraps(f)
@@ -125,6 +127,9 @@ def submit_threat():
         attachment_path=attachment_path,
         username=username
     )
+    
+    add_vulnerable_assets_to_threat_intel(threat_report)
+
 
     # 🔹 Database Transaction Handling
     try:

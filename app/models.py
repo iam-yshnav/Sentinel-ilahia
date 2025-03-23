@@ -102,3 +102,22 @@ class User(db.Model):
         if self.role == 'normal':
             return Organization.query.filter_by(name='Individual Users').first()
         return self.organization
+
+class ThreatIntelligence(db.Model):
+    __tablename__ = 'threat_intelligence'
+
+    id = db.Column(db.Integer, primary_key=True)
+    organization_id = db.Column(db.Integer, db.ForeignKey('organizations.id'), nullable=False)
+    asset_id = db.Column(db.Integer, db.ForeignKey('assets.id'), nullable=False)
+    server_name = db.Column(db.String(200), nullable=False)
+    threat_id = db.Column(db.Integer, db.ForeignKey('threat_reports.id'), nullable=False)
+    state = db.Column(db.String(50), default="Triaged",nullable=False)  # e.g., 'triaged', 'mitigated'
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Optional relationships for easier access from related models
+    organization = db.relationship('Organization', backref=db.backref('threat_intelligence', lazy=True))
+    asset = db.relationship('Asset', backref=db.backref('threat_intelligence', lazy=True))
+    threat = db.relationship('ThreatReport', backref=db.backref('threat_intelligence', lazy=True))
+
+    def __repr__(self):
+        return f'<ThreatIntelligence {self.server_name} - State: {self.state}>'

@@ -1,8 +1,8 @@
 """Initial Migration
 
-Revision ID: ed5c414925b2
+Revision ID: 0fe815adcd9e
 Revises: 
-Create Date: 2025-03-03 15:04:03.935312
+Create Date: 2025-03-23 10:55:32.298462
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'ed5c414925b2'
+revision = '0fe815adcd9e'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -29,6 +29,7 @@ def upgrade():
     )
     op.create_table('threat_reports',
     sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('username', sa.String(length=200), nullable=True),
     sa.Column('threat_title', sa.String(length=300), nullable=False),
     sa.Column('summary', sa.Text(), nullable=True),
     sa.Column('iocs', sa.Text(), nullable=True),
@@ -48,7 +49,7 @@ def upgrade():
     )
     op.create_table('assets',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('asset_name', sa.String(length=200), nullable=False),
+    sa.Column('server_name', sa.String(length=200), nullable=False),
     sa.Column('os_name', sa.String(length=100), nullable=False),
     sa.Column('os_version', sa.String(length=50), nullable=False),
     sa.Column('ip_address', sa.String(length=45), nullable=False),
@@ -71,12 +72,14 @@ def upgrade():
     op.create_table('users',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('username', sa.String(length=80), nullable=False),
+    sa.Column('email', sa.String(length=120), nullable=False),
     sa.Column('password_hash', sa.String(length=255), nullable=False),
     sa.Column('token', sa.String(length=255), nullable=True),
     sa.Column('role', sa.String(length=50), nullable=True),
-    sa.Column('organization_id', sa.Integer(), nullable=True),
+    sa.Column('status', sa.String(length=20), nullable=True),
     sa.Column('name', sa.String(length=120), nullable=True),
     sa.Column('salutation', sa.String(length=50), nullable=True),
+    sa.Column('organization_id', sa.Integer(), nullable=True),
     sa.Column('company', sa.String(length=120), nullable=True),
     sa.Column('designation', sa.String(length=120), nullable=True),
     sa.Column('team', sa.String(length=120), nullable=True),
@@ -84,6 +87,7 @@ def upgrade():
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['organization_id'], ['organizations.id'], ),
     sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('email'),
     sa.UniqueConstraint('username')
     )
     # ### end Alembic commands ###
