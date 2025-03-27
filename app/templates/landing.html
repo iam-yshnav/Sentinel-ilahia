@@ -122,6 +122,150 @@
                 margin: 30px auto;
             }
         }
+/* Chat Button Styles */
+.chat-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: black; /* Changed to black */
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s ease;
+            z-index: 1000;
+        }
+
+        .chat-button:hover {
+            background-color: #333; /* Darker black on hover */
+        }
+
+        /* Chat Panel Styles */
+        .chat-panel {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 350px;
+            height: 500px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: none;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        .chat-panel.open {
+            display: flex;
+        }
+
+        .chat-header {
+            background-color: #3b82f6;
+            color: white;
+            padding: 15px;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .close-button:hover {
+            color: #ff6b6b; /* Red color on hover */
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message.sent {
+            align-items: flex-end;
+        }
+
+        .message.received {
+            align-items: flex-start;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 10px;
+            border-radius: 12px;
+            background: #3b82f6;
+            color: white;
+        }
+
+        .message.received .message-content {
+            background: #e9ecef;
+            color: #1e293b;
+        }
+
+        .chat-input-area {
+            display: flex;
+            padding: 10px;
+            background: white;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        .send-button {
+            margin-left: 10px;
+            padding: 10px 20px;
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .send-button:hover {
+            background-color: #2563eb;
+        }
+        /* Footer Styles */
+.landing-footer {
+    color: white;
+    text-align: center;
+    padding: 52px;
+    margin-top: auto;
+}
+
+.landing-footer p {
+    margin: 0;
+}
     </style>
 </head>
 <body>
@@ -155,10 +299,28 @@
                 <h2>Normal User</h2>
                 <p>Join our security community to report vulnerabilities and collaborate with organizations.</p>
                 <div class="auth-buttons">
-                    <a class="auth-btn company-btn" href="auth/userregister">Company User Register</a>
+                    <a class="auth-btn user-btn" href="auth/login">Login</a>
+                    <a class="auth-btn user-btn" href="auth/userregister">Register</a>
                 </div>
             </div>
         </div>
+            <!-- Chat Button and Panel -->
+            <button class="chat-button" onclick="toggleChatPanel()">💬</button>
+            <div class="chat-panel" id="chatPanel">
+                <div class="chat-header">
+                    Chat Support
+                    <button class="close-button" onclick="toggleChatPanel()">×</button>
+                </div>
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message received">
+                        <div class="message-content">Hello! How can I help you today?</div>
+                    </div>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" class="chat-input" id="chatInput" placeholder="Type a message...">
+                    <button class="send-button" onclick="sendMessage()">Send</button>
+                </div>
+            </div>
 
         <a class="stay-logged-out-link" href="all">
             Explore Public Threats Without Login
@@ -167,5 +329,33 @@
     <div class="landing-footer">
         <p>&copy; <span id="current-year"></span> Sentinel. All rights reserved.</p>
     </div>
+
+
+
+    <script>
+      function toggleChatPanel() {
+            const chatPanel = document.getElementById('chatPanel');
+            chatPanel.classList.toggle('open');
+        }
+
+        function sendMessage() {
+            const chatInput = document.getElementById('chatInput');
+            const chatMessages = document.getElementById('chatMessages');
+
+            if (chatInput.value.trim() !== "") {
+                // Add user's message
+                const userMessage = document.createElement('div');
+                userMessage.classList.add('message', 'sent');
+                userMessage.innerHTML = `<div class="message-content">${chatInput.value}</div>`;
+                chatMessages.appendChild(userMessage);
+
+                // Clear input
+                chatInput.value = "";
+
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        }
+    </script>
 </body>
 </html>

@@ -1,11 +1,14 @@
 from flask import render_template, request, redirect, url_for, flash, jsonify, current_app
 from werkzeug.utils import secure_filename
 from functools import wraps
-from app.models import Asset, User, ThreatReport
+from app.models import Asset, Organization, ThreatIntelligence, User, ThreatReport
 import os
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from app import db
 from app.main import main_bp
+
+from flask import Blueprint, render_template, make_response
+from weasyprint import HTML
 
 from .comp import add_vulnerable_assets_to_threat_intel
 
@@ -151,3 +154,75 @@ def faq():
 @main_bp.route('/guidelines')
 def guidelines():
     return render_template('guidelines.html')  # ✅ Renders the Guidelines page
+
+@main_bp.route('/threat_intelligence/<int:intel_id>/pdf')
+def generate_pdf(intel_id):
+    try:
+        # Fetch the threat intelligence entry
+        threat_intel = db.session.get(ThreatIntelligence, intel_id)
+        if not threat_intel:
+            return jsonify({"error": "Threat Intelligence entry not found"}), 404
+
+        # Get related threat report
+        threat = db.session.get(ThreatReport, threat_intel.threat_id)
+        if not threat:
+            return jsonify({"error": "Threat Report not found"}), 404
+
+        # Get related asset
+        asset = db.session.get(Asset, threat_intel.asset_id)
+        if not asset:
+            return jsonify({"error": "Asset not found"}), 404
+
+        # Get organization details if available
+        organization = db.session.get(Organization, asset.organization_id) if asset.organization_id else None
+
+        # Prepare data for rendering
+        html_content = render_template("threat_pdf.html",
+    # Threat Overview
+    threat_title=threat.threat_title,  # Change 'threat_name' → 'threat_title'
+    severity_level=threat.severity_level,  # Change 'severity' → 'severity_level'
+    impact_type=threat.impact_type or "Unknown",
+    detailed_description=threat.detailed_description or "No description available",  # Change 'description' → 'detailed_description'
+    iocs=threat.iocs or "No IOCs provided",
+    affected_platforms=threat.affected_platforms or "Unknown",
+    affected_platform_ver=threat.affected_platform_ver or "Unknown",
+    affected_service=threat.affected_service or "Unknown",
+    affected_service_ver=threat.affected_service_ver or "Unknown",
+    mitigation_actions=threat.mitigation_actions or "No mitigation steps provided",
+    attachment_path=threat.attachment_path or "No attachment",
+
+    # Asset Details
+    server_name=asset.server_name,  # Change 'asset_name' → 'server_name'
+    ip_address=asset.ip_address,
+    os_name=asset.os_name,
+    os_version=asset.os_version,
+    service_name=asset.service_name,
+    service_version=asset.service_version,
+    server_purpose=asset.server_purpose,
+    cpu_configuration=f"{asset.cpu_configuration} Cores",
+    ram_capacity=f"{asset.ram_capacity} GB",
+    storage_configuration=asset.storage_configuration or "No details",
+    network_configuration=asset.network_configuration or "No details",
+    security_protocols=asset.security_protocols or "No details",
+    admin_contact=asset.admin_contact,
+
+    # Organization Information
+    organization_name=organization.name if organization else "Unknown",
+    industry=organization.industry if organization else "Not Specified",
+
+    # Additional Information
+    state=threat_intel.state,  
+    last_scanned=threat_intel.created_at.strftime('%Y-%m-%d %H:%M:%S')
+)
+
+        # Convert the HTML to PDF
+        pdf_bytes = HTML(string=html_content).write_pdf()
+
+        # Return the PDF as a response
+        response = make_response(pdf_bytes)
+        response.headers['Content-Type'] = 'application/pdf'
+        response.headers['Content-Disposition'] = f'inline; filename="threat_intelligence_{intel_id}.pdf"'
+        
+        return response
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500

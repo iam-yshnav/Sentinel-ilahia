@@ -132,10 +132,26 @@ def add_vulnerable_assets_to_threat_intel(threat_report):
     The new record will include the organization id, asset id, server name,
     threat id, and an initial state (e.g., 'triaged').
     """
+    if threat_report not in db.session:
+        db.session.add(threat_report)
+    db.session.commit()  # Ensure threat_report is committed and has an ID
+
     print(f"Searching for vulnerable assets based on threat report: {threat_report.threat_title}")
     vulnerable_assets = search_vulnerable_assets(threat_report)
-    
+
     for asset in vulnerable_assets:
+        # Check if entry already exists
+        existing_entry = ThreatIntelligence.query.filter_by(
+            organization_id=asset.organization_id,
+            asset_id=asset.id,
+            threat_id=threat_report.id
+        ).first()
+        
+        if existing_entry:
+            print(f"Threat intelligence entry already exists for asset {asset.id}, skipping.")
+            continue  
+
+        # Add new threat intelligence record
         threat_intel = ThreatIntelligence(
             organization_id=asset.organization_id,
             asset_id=asset.id,
@@ -144,7 +160,8 @@ def add_vulnerable_assets_to_threat_intel(threat_report):
             state='triaged'  # You can change the initial state as needed
         )
         db.session.add(threat_intel)
-    db.session.commit()
+    db.session.commit()   
+    print(f"Added {len(vulnerable_assets)} assets to ThreatIntelligence.")
     return vulnerable_assets
 
 # Example usage:
