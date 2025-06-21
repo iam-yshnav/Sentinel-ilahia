@@ -64,6 +64,6 @@ Major Routes
 | 25    | /org/create_assset                 | POST       | Organization      | Create assets within an organization                 |                                           | ✅          |
 | 26    | /org/<int:org_id>/assets           | GET        | Organization      | Retrieve assets within an organization               | [Beware of IDOR]                          | ✅          |
 | 27    | /org/validate                      | TBD        | Organization      | Check vulnerabilities against existing threats       | [To Implement]                            |             |
-| 28    | /org/generate_report               | TBD        | Organization      | Generate a report                                    | [To Implement, AI Module]                 |             |
-| 29    | /org/chat                          | TBD        | Organization      | RAG based chat functionality                         | [To Implement, AI Module]                 |             |
+| 28    | /org/generate_report               | TBD        | Organization      | Generate a report                                    | [To Implement, AI Module]                 | ✅          |
+| 29    | /org/chat                          | TBD        | Organization      | RAG based chat functionality                         | [To Implement, AI Module]                 | ✅          |
 | 30    | /org/add_excel                     | TBD        | Organization      | Add data to DB from Excel file                       | [To Implement, External Module]           |             |
