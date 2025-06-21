@@ -3,10 +3,12 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import os
 from flask_jwt_extended import JWTManager
+from flask_mail import Mail
 # Init -> Initilizstion -> meaning  if app package is called it will start __init__.py
-
+mail = Mail()
 db = SQLAlchemy() # ORM  https://auth0.com/blog/sqlalchemy-orm-tutorial-for-python-developers/
 migrate = Migrate()
+
 
 def  create_app():
     app = Flask(__name__, instance_relative_config=True)
@@ -21,6 +23,8 @@ def  create_app():
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
     db.init_app(app) # db ivide init avum
     migrate.init_app(app, db)
+    mail.init_app(app)  
+    
     from app.main.routes import main_bp
     from app.auth.routes import auth_bp
     from app.admin.routes import admin_bp

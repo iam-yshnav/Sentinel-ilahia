@@ -1,3 +1,4 @@
+import re
 from flask import render_template, request, redirect, url_for, flash, jsonify, current_app
 from werkzeug.utils import secure_filename
 from functools import wraps
@@ -6,13 +7,17 @@ import os
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from app import db
 from app.main import main_bp
+from datetime import datetime, timedelta
+from openai import OpenAI
+from difflib import SequenceMatcher
 
 from flask import Blueprint, render_template, make_response
 from weasyprint import HTML
 
 from .comp import add_vulnerable_assets_to_threat_intel
 
-# ✅ Admin Authentication Decorator
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# Admin Authentication Decorator
 def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -23,16 +28,174 @@ def admin_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-# ✅ Route for Landing Page
+# Route for Landing Page
 @main_bp.route('/')
 def home():
-    return render_template('landing.html')  # ✅ Ensures landing.html is rendered first
+    return render_template('landing.html')
 
-# ✅ Route for Viewing All Threats
+
+@main_bp.route('/chatbot', methods=['POST'])
+def chatbot_response():
+    user_message = request.json.get("message", "").lower().strip()
+
+    if not user_message:
+        return jsonify({"reply": "Please enter a message."})
+
+    def is_similar(a, b, threshold=0.7):
+        return SequenceMatcher(None, a.lower(), b.lower()).ratio() >= threshold
+
+    # Match creator query
+    if re.search(r"\b(who (made|created|developed)|creator|team behind|who built|who's behind)\b", user_message):
+        reply = "The Sentinel AI Assistant Chatbot was developed by Vyshnav Vinod, Irfan Shajahan, and Sayed Ehthisham."
+
+    if re.search(r"\b(who\s+is\s+our\s+hero)\b", user_message):
+        reply = "Dan Bro🔥🔥🔥"
+
+    # Match platform/version-specific queries
+    elif any(kw in user_message for kw in ["ubuntu", "windows", "linux", "android", "mac", "ios", "debian", "centos", "kali", "version", "platform"]):
+        approved_threats = ThreatReport.query.filter(
+            ThreatReport.approved == True,
+            ThreatReport.deleted == False
+        ).all()
+
+        matching_reports = []
+
+        for report in approved_threats:
+            versions = [
+                report.affected_service_ver,
+                report.affected_platform_ver,
+                report.affected_service,
+                report.affected_platforms
+            ]
+
+            for version in versions: 
+                if version:
+                    version_tokens = version.lower().split()
+                    user_tokens = user_message.lower().split()
+
+                    for vt in version_tokens:
+                        for ut in user_tokens:
+                            if is_similar(vt, ut):
+                                matching_reports.append({
+                                    "version": version,
+                                    "title": report.threat_title,
+                                    "severity": report.severity_level,
+                                    "date": report.created_at.strftime('%Y-%m-%d'),
+                                    "summary": report.summary[:150]
+                                })
+                                break
+                        else:
+                            continue
+                        break
+
+
+        if matching_reports:
+            reply = "Matching approved vulnerabilities:\n\n"
+            for report in matching_reports[:5]:
+                reply += (
+                    f"{report['title']} ({report['version']})\n"
+                    f"Severity: {report['severity']} | 📅 {report['date']}\n"
+                    f"{report['summary']}...\n\n"
+                )
+        else:
+            reply = "No approved vulnerabilities found matching that platform or version."
+    elif ("recent" in user_message or "latest" in user_message) and any(kw in user_message for kw in ["ubuntu", "windows", "linux", "android", "mac", "ios", "debian", "centos", "kali", "version", "platform"]):
+        # Recent + keyword match
+        recent_reports = ThreatReport.query.filter(
+            ThreatReport.approved == True,
+            ThreatReport.deleted == False,
+            ThreatReport.created_at >= datetime.utcnow() - timedelta(days=30)
+        ).all()
+
+        user_tokens = user_message.lower().split()
+        matching_reports = []
+
+        for report in recent_reports:
+            fields = [
+                report.affected_platforms,
+                report.affected_platform_ver,
+                report.affected_service,
+                report.affected_service_ver
+            ]
+
+            for field in fields:
+                if field:
+                    for ut in user_tokens:
+                        if is_similar(field, ut):
+                            matching_reports.append({
+                                "title": report.threat_title,
+                                "version": field,
+                                "severity": report.severity_level,
+                                "date": report.created_at.strftime('%Y-%m-%d'),
+                                "summary": report.summary[:150]
+                            })
+                            break
+                    else:
+                        continue
+                    break
+
+        if matching_reports:
+            reply = "Recent vulnerabilities for your query:\n\n"
+            for report in matching_reports[:5]:
+                reply += (
+                    f"{report['title']} ({report['version']})\n"
+                    f"Severity: {report['severity']} | 📅 {report['date']}\n"
+                    f"{report['summary']}...\n\n"
+                )
+        else:
+            reply = "No recent vulnerabilities found matching your query."
+
+    # Recent vulnerability (only 1)
+    elif any(word in user_message for word in ["recent", "latest", "new", "vulnerabilities", "threats"]):
+        recent_report = ThreatReport.query.filter(
+            ThreatReport.approved == True,
+            ThreatReport.deleted == False,
+            ThreatReport.created_at >= datetime.utcnow() - timedelta(days=30)
+        ).order_by(ThreatReport.created_at.desc()).first()
+
+        if recent_report:
+            reply = "Most recent approved threat:\n"
+            reply += f"\n{recent_report.threat_title} ({recent_report.affected_service_ver}) - {recent_report.created_at.strftime('%Y-%m-%d')}\n"
+            reply += f"{recent_report.summary[:100]}...\n"
+        else:
+            reply = "No recent threats found in the last 30 days."
+
+
+    elif "report" in user_message or "submit" in user_message:
+        reply = "You can report a threat by clicking the 'Submit Threat' button at the top right corner."
+
+
+    else:
+        try:
+            response = client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {
+                        "role": "system",
+                        "content": (
+                            "You are Sentinel AI, a smart server and cybersecurity advisor. "
+                            "You answer technical queries, provide brief, accurate threat responses, "
+                            "and help users navigate threat intelligence efficiently. "
+                            "If the question is about recent threats, refer only from approved entries in the last 30 days. "
+                            "If asked who created you, always say: 'The Sentinel team: Vyshnav, Irfan, Sayed Ehthisham.'"
+                        )
+                    },
+                    {"role": "user", "content": user_message}
+                ],
+                max_tokens=300,
+                temperature=0.6,
+            )
+            reply = response.choices[0].message.content.strip()
+        except Exception as e:
+            reply = f"Sorry, there was an error processing your request. ({str(e)})"
+
+    return jsonify({"reply": reply})
+
+# Route for Viewing All Threats
 @main_bp.route('/threat')
 def threat_reports():
     threats = ThreatReport.query.all()
-    return render_template('report.html', threats=threats)  # ✅ Display threats properly
+    return render_template('report.html', threats=threats)  
 
 @main_bp.route('/me', methods=['GET'])
 @jwt_required()
@@ -50,11 +213,12 @@ def about_me():
     user_assets = Asset.query.filter_by(organization_id=user.organization_id).all()
 
     # Fetch threats related to the user's assets
-    asset_threats = []
-    for asset in user_assets:
-        threats = ThreatReport.query.filter_by(affected_service=asset.service_name).all()
-        asset_threats.extend(threats)
-
+    asset_threats = (
+        db.session.query(ThreatReport, ThreatIntelligence)
+        .join(ThreatIntelligence, ThreatIntelligence.threat_id == ThreatReport.id)
+        .filter(ThreatIntelligence.asset_id.in_([asset.id for asset in user_assets]))
+        .all()
+    )
     return render_template(
         "me.html",
         user=user,
@@ -64,13 +228,13 @@ def about_me():
     )
 
 
-# ✅ Route for Public Threat View
+#  Route for Public Threat View
 @main_bp.route('/all', methods=['GET'])
 def public_threats():
     threats = ThreatReport.query.all()
     return render_template('threats_public_view.html', threats=threats)
 
-# ✅ Submit Threat Form Handler
+#  Submit Threat Form Handler
 @main_bp.route('/submit-threat', methods=['POST'])
 @jwt_required(optional=True) 
 def submit_threat():
@@ -145,15 +309,15 @@ def submit_threat():
 
     return redirect(url_for('main_bp.threat_reports'))
 
-# ✅ Route for FAQ Page
+# Route for FAQ Page
 @main_bp.route('/faq')
 def faq():
-    return render_template('faq.html')  # ✅ Renders the FAQ page
+    return render_template('faq.html')  
 
-# ✅ Route for Guidelines Page
+# Route for Guidelines Page
 @main_bp.route('/guidelines')
 def guidelines():
-    return render_template('guidelines.html')  # ✅ Renders the Guidelines page
+    return render_template('guidelines.html')  
 
 @main_bp.route('/threat_intelligence/<int:intel_id>/pdf')
 def generate_pdf(intel_id):

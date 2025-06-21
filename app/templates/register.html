@@ -154,7 +154,12 @@
         document.querySelector(".submission-form").addEventListener("submit", function(event) {
             var password = document.getElementById("password").value;
             var confirmPassword = document.getElementById("confirm_password").value;
-
+            var passwordPattern = /^(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/;
+            if (!passwordPattern.test(password)) {
+            event.preventDefault();
+            alert("Enter a password with a minimum of 8 characters and at least one special character.");
+            return;
+            }
             if (password !== confirmPassword) {
                 event.preventDefault();
                 alert("Passwords do not match!");

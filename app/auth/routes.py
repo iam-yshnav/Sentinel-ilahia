@@ -17,20 +17,20 @@ def register():
         password = request.form.get('password')
         name = request.form.get('name')
         salutation = request.form.get('salutation')
-        organization_id = request.form.get('organization_id')  # Get organization ID from form
+        organization_id = request.form.get('organization_id') 
         company = request.form.get('company')
         designation = request.form.get('designation')
         team = request.form.get('team')
         domain = request.form.get('domain')
-        email = request.form.get('email')  # Add email field
+        email = request.form.get('email')  
 
         # Convert organization_id to an integer if selected
         if organization_id and organization_id.isdigit():
             organization_id = int(organization_id)
         else:
-            organization_id = None  # Ensure it's None if not selected
+            organization_id = None  
 
-        # If organization is selected, ignore company field
+
         if organization_id:
             company = None  # Avoid storing both organization and company
 
@@ -53,7 +53,7 @@ def register():
             designation=designation,
             team=team,
             domain=domain,
-            status='pending'  # Default status
+            status='pending' 
         )
         new_user.set_password(password)
 
@@ -61,9 +61,9 @@ def register():
         db.session.commit()
 
         flash("Registered successfully! Please wait for admin approval.", "success")
-        return redirect(url_for('auth_bp.login'))  # Redirect to login after successful registration
+        return redirect(url_for('auth_bp.login')) 
 
-    # Fetch organizations from the database and pass them to the template
+
     organizations = Organization.query.all()
     return render_template('register.html', organizations=organizations)
 
@@ -78,20 +78,18 @@ def userregister():
         salutation = request.form.get('salutation')
         email = request.form.get('email')
 
-        # Check if username or email already exists
         existing_user = User.query.filter((User.username == username) | (User.email == email)).first()
         if existing_user:
             flash("Username or email already exists. Choose a different one.", "error")
             return redirect(url_for('auth_bp.userregister'))
 
-        # Create new user with role 'normal'
         new_user = User(
             username=username,
             role='normal',
             name=name,
             salutation=salutation,
             email=email,
-            status='pending'  # Default status
+            status='pending'
         )
         new_user.set_password(password)
 
@@ -99,7 +97,7 @@ def userregister():
         db.session.commit()
 
         flash("Registered successfully! Please wait for admin approval.", "success")
-        return redirect(url_for('auth_bp.login'))  # Redirect to login after successful registration
+        return redirect(url_for('auth_bp.login')) 
 
     return render_template('othersregister.html')
 

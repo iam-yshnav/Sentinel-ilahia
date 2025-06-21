@@ -1,16 +1,20 @@
-
-from app import db
+from flask_mail import Message
+from app import db, mail
+from flask import current_app
 from app.models import Asset, ThreatIntelligence
+import re 
 
 def version_to_tuple(version_str):
     """
-    Convert a version string like '3.2.1' or '2.2' into a tuple of integers (3, 2, 1) or (2, 2)
-    for easy comparison.
+    Convert a version string like 'Windows Server 2019' or 'Ubuntu 20.04'
+    into a tuple of integers (2019,) or (20, 4) for easy comparison.
     """
     try:
-        return tuple(int(part) for part in version_str.split('.'))
+        # Extract numeric parts using regex
+        numbers = re.findall(r'\d+', version_str)
+        return tuple(int(part) for part in numbers) if numbers else None
     except Exception:
-        return None
+        return None 
 
 def compare_versions(v1, v2):
     """
@@ -111,7 +115,7 @@ def search_vulnerable_assets(threat_report):
         Asset.os_name == threat_report.affected_platforms,
         Asset.service_name == threat_report.affected_service
     ).all() # This fetches most of them, but we need to further filter by version
-    print(f"Found {len(assets)} assets with matching OS and service names.")
+    print(f"Checking {len(assets)} assets for vulnerability based on threat: {threat_report.threat_title}")
     vulnerable_assets = []  
     for asset in assets:
         # Check if both OS version and service version meet the vulnerability criteria
@@ -121,7 +125,7 @@ def search_vulnerable_assets(threat_report):
         if os_vulnerable and service_vulnerable:
             vulnerable_assets.append(asset)
 
-    print(f"Found {len(vulnerable_assets)} vulnerable assets.")
+    print(f"Total vulnerable assets found: {len(vulnerable_assets)}")
     return vulnerable_assets
 
 def add_vulnerable_assets_to_threat_intel(threat_report):
@@ -140,7 +144,7 @@ def add_vulnerable_assets_to_threat_intel(threat_report):
     vulnerable_assets = search_vulnerable_assets(threat_report)
 
     for asset in vulnerable_assets:
-        # Check if entry already exists
+        # check if entry already exists
         existing_entry = ThreatIntelligence.query.filter_by(
             organization_id=asset.organization_id,
             asset_id=asset.id,
@@ -157,9 +161,36 @@ def add_vulnerable_assets_to_threat_intel(threat_report):
             asset_id=asset.id,
             server_name=asset.server_name,
             threat_id=threat_report.id,
-            state='triaged'  # You can change the initial state as needed
+            state='triaged'  # Initial state
         )
-        db.session.add(threat_intel)
+        db.session.add(threat_intel)    
+         # --- Email Notification ---
+        try:
+            subject = f"New Threat Assigned: {threat_report.threat_title}"
+            body = f"""Hello,
+
+            A new vulnerability has been identified for the server: {asset.server_name}
+
+    Threat Details:
+    - Title: {threat_report.threat_title}
+    - OS: {asset.os_name} {asset.os_version}
+    - Service: {asset.service_name} {asset.service_version}
+
+    Please review and take necessary action. If you require further assistance, feel free to reach out.
+
+    Best Regards,
+    Sentinel Threat Intelligence Platform
+    """
+            msg = Message(
+                subject=subject,
+                recipients=[asset.admin_contact], 
+                body=body,
+                sender=current_app.config['MAIL_DEFAULT_SENDER']
+            )
+            mail.send(msg)
+            print(f"Email sent to {asset.admin_contact} for asset {asset.id}")
+        except Exception as e:
+            print(f"Failed to send email to {asset.admin_contact}: {e}")
     db.session.commit()   
     print(f"Added {len(vulnerable_assets)} assets to ThreatIntelligence.")
     return vulnerable_assets

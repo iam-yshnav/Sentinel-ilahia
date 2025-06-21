@@ -1,360 +1,434 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sentinel</title>
     <style>
-        /* Base styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+      /* Base styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
 
-        body {
-            background: #f8f9fa;
-            color: #2c3e50;
-        }
+      body {
+        background: #f8f9fa;
+        color: #2c3e50;
+      }
 
-        /* Navbar styles */
+      /* Navbar styles */
+      .landing-navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #0056b3;
+        padding: 10px 20px;
+        color: white;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .landing-navbar .landing-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .landing-logo img {
+        height: 40px;
+        width: 40px;
+      }
+
+      .landing-logo h1 {
+        font-size: 1.5rem;
+        margin: 0;
+      }
+
+      .landing-nav-links {
+        display: flex;
+        gap: 15px;
+      }
+
+      .landing-nav-links a {
+        color: white;
+        text-decoration: none;
+        font-size: 1rem;
+        font-weight: bold;
+        padding: 8px 12px;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+      }
+
+      .landing-nav-links a:hover {
+        background-color: #003d80;
+      }
+
+      /* Container and form styles */
+      .container {
+        max-width: 1000px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      .header h1 {
+        color: #007bff;
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .header p {
+        color: #6c757d;
+        font-size: 1.1rem;
+      }
+
+      .server-form {
+        display: grid;
+        grid-gap: 1.5rem;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+      }
+
+      label {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #007bff;
+      }
+
+      input,
+      select,
+      textarea {
+        padding: 0.8rem;
+        border: 2px solid #e9ecef;
+        border-radius: 6px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        border-color: #007bff;
+        outline: none;
+      }
+
+      .btn-group {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+        margin-top: 1.5rem;
+      }
+
+      button {
+        padding: 0.8rem 2rem;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .btn-submit {
+        background: #007bff;
+        color: white;
+      }
+
+      .btn-submit:hover {
+        background: #0056b3;
+      }
+
+      .btn-reset {
+        background: #e9ecef;
+        color: #2c3e50;
+      }
+
+      .btn-reset:hover {
+        background: #ced4da;
+      }
+
+      .helper-text {
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin-top: 0.3rem;
+      }
+
+      /* Responsive styles */
+      @media (max-width: 768px) {
         .landing-navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #0056b3;
-            padding: 10px 20px;
-            color: white;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .landing-navbar .landing-logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .landing-logo img {
-            height: 40px;
-            width: 40px;
-        }
-
-        .landing-logo h1 {
-            font-size: 1.5rem;
-            margin: 0;
+          flex-direction: column;
+          gap: 1rem;
+          padding: 1rem;
         }
 
         .landing-nav-links {
-            display: flex;
-            gap: 15px;
+          flex-direction: column;
+          gap: 0.5rem;
+          text-align: center;
         }
 
-        .landing-nav-links a {
-            color: white;
-            text-decoration: none;
-            font-size: 1rem;
-            font-weight: bold;
-            padding: 8px 12px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-        .landing-nav-links a:hover {
-            background-color: #003d80;
-        }
-
-        /* Container and form styles */
         .container {
-            max-width: 1000px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 2rem;
+          margin: 1rem;
+          padding: 1.5rem;
         }
 
         .header h1 {
-            color: #007bff;
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .header p {
-            color: #6c757d;
-            font-size: 1.1rem;
-        }
-
-        .server-form {
-            display: grid;
-            grid-gap: 1.5rem;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
+          font-size: 2rem;
         }
 
         .form-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
+          grid-template-columns: 1fr;
         }
 
-        label {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: #007bff;
+        .btn-group {
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+
+        button {
+          width: 100%;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .landing-logo h1 {
+          font-size: 1.5rem;
+        }
+
+        .header h1 {
+          font-size: 1.8rem;
+        }
+
+        .header p {
+          font-size: 1rem;
         }
 
         input,
         select,
         textarea {
-            padding: 0.8rem;
-            border: 2px solid #e9ecef;
-            border-radius: 6px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
+          font-size: 0.9rem;
         }
-
-        input:focus,
-        select:focus,
-        textarea:focus {
-            border-color: #007bff;
-            outline: none;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 1rem;
-            justify-content: flex-end;
-            margin-top: 1.5rem;
-        }
-
-        button {
-            padding: 0.8rem 2rem;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .btn-submit {
-            background: #007bff;
-            color: white;
-        }
-
-        .btn-submit:hover {
-            background: #0056b3;
-        }
-
-        .btn-reset {
-            background: #e9ecef;
-            color: #2c3e50;
-        }
-
-        .btn-reset:hover {
-            background: #ced4da;
-        }
-
-        .helper-text {
-            font-size: 0.9rem;
-            color: #6c757d;
-            margin-top: 0.3rem;
-        }
-
-        /* Responsive styles */
-        @media (max-width: 768px) {
-            .landing-navbar {
-                flex-direction: column;
-                gap: 1rem;
-                padding: 1rem;
-            }
-
-            .landing-nav-links {
-                flex-direction: column;
-                gap: 0.5rem;
-                text-align: center;
-            }
-
-            .container {
-                margin: 1rem;
-                padding: 1.5rem;
-            }
-
-            .header h1 {
-                font-size: 2rem;
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            .btn-group {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-
-            button {
-                width: 100%;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .landing-logo h1 {
-                font-size: 1.5rem;
-            }
-
-            .header h1 {
-                font-size: 1.8rem;
-            }
-
-            .header p {
-                font-size: 1rem;
-            }
-
-            input,
-            select,
-            textarea {
-                font-size: 0.9rem;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="landing-navbar">
-        <div class="landing-logo">
-            <img src="{{ url_for('static', filename='uploads/sentinel-black.png') }}" alt="Sentinel Logo">
-            <h1>Sentinel</h1>
-        </div>
-        <div class="landing-nav-links">
-            <a href="{{ url_for('main_bp.home') }}">Home</a>
-            <a href="{{ url_for('main_bp.guidelines') }}">Guidelines</a>
-            <a href="{{ url_for('main_bp.faq') }}">FAQ</a>
-        </div>
+      <div class="landing-logo">
+        <img
+          src="{{ url_for('static', filename='uploads/sentinel-black.png') }}"
+          alt="Sentinel Logo"
+        />
+        <h1>Sentinel</h1>
+      </div>
+      <div class="landing-nav-links">
+        <a href="{{ url_for('main_bp.about_me') }}">Profile</a>
+      </div>
     </div>
 
     <!-- Flash Messages -->
     <div id="flash-messages">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="flash-message flash-{{ category }}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %}
+      <div class="flash-message flash-{{ category }}">{{ message }}</div>
+      {% endfor %} {% endif %} {% endwith %}
     </div>
 
     <div class="container">
-        <form id="assetForm" class="server-form" method="POST" action="{{ url_for('org_bp.create_asset') }}">
-            <input type="hidden" name="organization_id" value="{{ org_id }}">
+      <form
+        id="assetForm"
+        class="server-form"
+        method="POST"
+        action="{{ url_for('org_bp.create_asset') }}"
+      >
+        <input type="hidden" name="organization_id" value="{{ org_id }}" />
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="server_name">Server Name</label>
-                    <input type="text" id="server_name" name="server_name" placeholder="e.g., Web Server 1" required>
-                </div>
-                <div class="form-group">
-                    <label for="ip_address">IP Address</label>
-                    <input type="text" id="ip_address" name="ip_address" placeholder="192.168.1.1" required>
-                </div>
-            </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="server_name">Server Name</label>
+            <input
+              type="text"
+              id="server_name"
+              name="server_name"
+              placeholder="e.g., Web Server 1"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="ip_address">IP Address</label>
+            <input
+              type="text"
+              id="ip_address"
+              name="ip_address"
+              placeholder="192.168.1.1"
+              required
+            />
+          </div>
+        </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="os_name">Operating System</label>
-                    <input type="text" id="os_name" name="os_name" placeholder="e.g., Ubuntu" required>
-                </div>
-                <div class="form-group">
-                    <label for="os_name">OS Version</label>
-                    <input type="text" id="os_version" name="os_version" placeholder="22.04" required>
-                </div>
-                <div class="form-group">
-                    <label for="service_name">Service Name</label>
-                    <input type="text" id="service_name" name="service_name" placeholder="e.g., Apache HTTP Server">
-                </div>
-            </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="os_name">Operating System</label>
+            <input
+              type="text"
+              id="os_name"
+              name="os_name"
+              placeholder="e.g., Ubuntu"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="os_name">OS Version</label>
+            <input
+              type="text"
+              id="os_version"
+              name="os_version"
+              placeholder="22.04"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="service_name">Service Name</label>
+            <input
+              type="text"
+              id="service_name"
+              name="service_name"
+              placeholder="e.g., Apache HTTP Server"
+            />
+          </div>
+        </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="service_version">Service Version</label>
-                    <input type="text" id="service_version" name="service_version" placeholder="e.g., 2.4.41">
-                </div>
-                <div class="form-group">
-                    <label for="server_purpose">Server Purpose</label>
-                    <input type="text" id="server_purpose" name="server_purpose" placeholder="e.g., Database Server" required>
-                </div>
-            </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="service_version">Service Version</label>
+            <input
+              type="text"
+              id="service_version"
+              name="service_version"
+              placeholder="e.g., 2.4.41"
+            />
+          </div>
+          <div class="form-group">
+            <label for="server_purpose">Server Purpose</label>
+            <input
+              type="text"
+              id="server_purpose"
+              name="server_purpose"
+              placeholder="e.g., Database Server"
+              required
+            />
+          </div>
+        </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="cpu_configuration">CPU Configuration (Cores)</label>
-                    <input type="number" id="cpu_configuration" name="cpu_configuration" placeholder="e.g., 8" required>
-                </div>
-                <div class="form-group">
-                    <label for="ram_capacity">RAM Capacity (GB)</label>
-                    <input type="number" id="ram_capacity" name="ram_capacity" placeholder="e.g., 32" required>
-                </div>
-            </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="cpu_configuration">CPU Configuration (Cores)</label>
+            <input
+              type="number"
+              id="cpu_configuration"
+              name="cpu_configuration"
+              placeholder="e.g., 8"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="ram_capacity">RAM Capacity (GB)</label>
+            <input
+              type="number"
+              id="ram_capacity"
+              name="ram_capacity"
+              placeholder="e.g., 32"
+              required
+            />
+          </div>
+        </div>
 
-            <div class="form-group">
-                <label for="storage_configuration">Storage Configuration</label>
-                <textarea id="storage_configuration" name="storage_configuration" rows="3" placeholder="e.g., Disk 1: 500GB SSD, Disk 2: 2TB HDD"></textarea>
-            </div>
+        <div class="form-group">
+          <label for="storage_configuration">Storage Configuration</label>
+          <textarea
+            id="storage_configuration"
+            name="storage_configuration"
+            rows="3"
+            placeholder="e.g., Disk 1: 500GB SSD, Disk 2: 2TB HDD"
+          ></textarea>
+        </div>
 
-            <div class="form-group">
-                <label for="network_configuration">Network Configuration</label>
-                <textarea id="network_configuration" name="network_configuration" rows="3" placeholder="e.g., VLAN: 102, Ports Open: 80, 443"></textarea>
-            </div>
+        <div class="form-group">
+          <label for="network_configuration">Network Configuration</label>
+          <textarea
+            id="network_configuration"
+            name="network_configuration"
+            rows="3"
+            placeholder="e.g., VLAN: 102, Ports Open: 80, 443"
+          ></textarea>
+        </div>
 
-            <div class="form-group">
-                <label for="security_protocols">Security Protocols</label>
-                <textarea id="security_protocols" name="security_protocols" rows="2" placeholder="e.g., Firewall enabled, SSH key authentication"></textarea>
-            </div>
+        <div class="form-group">
+          <label for="security_protocols">Security Protocols</label>
+          <textarea
+            id="security_protocols"
+            name="security_protocols"
+            rows="2"
+            placeholder="e.g., Firewall enabled, SSH key authentication"
+          ></textarea>
+        </div>
 
-            <div class="form-group">
-                <label for="admin_contact">Admin Contact</label>
-                <input type="email" id="admin_contact" name="admin_contact" placeholder="admin@company.com" required>
-            </div>
+        <div class="form-group">
+          <label for="admin_contact">Admin Contact</label>
+          <input
+            type="email"
+            id="admin_contact"
+            name="admin_contact"
+            placeholder="admin@company.com"
+            required
+          />
+        </div>
 
-            <div class="btn-group">
-                <button type="reset" class="btn-reset">Clear Form</button>
-                <button type="submit" class="btn-submit">Register Server</button>
-            </div>
-        </form>
+        <div class="btn-group">
+          <button type="reset" class="btn-reset">Clear Form</button>
+          <button type="submit" class="btn-submit">Register Server</button>
+        </div>
+      </form>
     </div>
 
     <script>
-      document.getElementById('assetForm').addEventListener('submit', async function (e) {
-    e.preventDefault();
+      document
+        .getElementById("assetForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
 
-    const formData = new FormData(this);
-    const response = await fetch("{{ url_for('org_bp.create_asset') }}", {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(Object.fromEntries(formData))
-    });
+          const formData = new FormData(this);
+          const response = await fetch("{{ url_for('org_bp.create_asset') }}", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(Object.fromEntries(formData)),
+          });
 
-    const result = await response.json();
-    if (response.ok) {
-        alert(result.message);
-        window.location.href = "{{ url_for('main_bp.about_me') }}"; // Redirect to the 'me' route
-    } else {
-        alert(result.error);
-    }
-});
+          const result = await response.json();
+          if (response.ok) {
+            alert(result.message);
+            window.location.href = "{{ url_for('main_bp.about_me') }}"; // Redirect to the 'me' route
+          } else {
+            alert(result.error);
+          }
+        });
     </script>
-</body>
-
+  </body>
 </html>

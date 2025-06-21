@@ -1,6 +1,5 @@
 import os
 from datetime import timedelta
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 class Config:
@@ -18,3 +17,11 @@ class Config:
     JWT_COOKIE_CSRF_PROTECT = False  # Disable CSRF protection for simplicity
     JWT_ACCESS_COOKIE_PATH = '/'  # Make the cookie available for all routes
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=30)  # Refresh token expiration time (30 days)
+
+    #Flask-Mail Configuration
+    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_PORT = 587
+    MAIL_USE_TLS = True
+    MAIL_USERNAME = os.environ.get('MAIL_USERNAME') or ''
+    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD') or 'ipbh xhiz bbps mtmz'
+    MAIL_DEFAULT_SENDER = os.environ.get('MAIL_DEFAULT_SENDER') or ''

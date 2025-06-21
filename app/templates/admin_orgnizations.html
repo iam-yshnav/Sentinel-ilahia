@@ -1,176 +1,161 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% block title %}Admin Organizations{% endblock %} {%
+block content %}
+<style>
+  /* Left pane (list of organizations) */
+  .left-pane {
+    flex: 1;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+  }
 
-{% block title %}Admin Organizations{% endblock %}
+  /* Right pane (add organization form) */
+  .right-pane {
+    flex: 1;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
 
-{% block content %}
-    <style>
-        /* Left pane (list of organizations) */
-        .left-pane {
-            flex: 1;
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            overflow-x: auto;
-        }
+  h1,
+  h2 {
+    margin-bottom: 20px;
+  }
 
-        /* Right pane (add organization form) */
-        .right-pane {
-            flex: 1;
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
 
-        h1,
-        h2 {
-            margin-bottom: 20px;
-        }
+  table th,
+  table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+  table th {
+    background-color: #1abc9c;
+    color: white;
+  }
 
-        table th,
-        table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
+  table tr:hover {
+    background-color: #e8f6f3;
+  }
 
-        table th {
-            background-color: #1abc9c;
-            color: white;
-        }
+  .btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+  }
 
-        table tr:hover {
-            background-color: #e8f6f3;
-        }
+  .delete-btn {
+    background-color: #e74c3c;
+    color: white;
+  }
 
-        .btn {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-        }
+  .add-btn {
+    background-color: #27ae60;
+    color: white;
+  }
 
-        .delete-btn {
-            background-color: #e74c3c;
-            color: white;
-        }
+  input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
 
-        .add-btn {
-            background-color: #27ae60;
-            color: white;
-        }
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+  }
 
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
+  @media (max-width: 768px) {
+    .main-content {
+      flex-direction: column;
+    }
+  }
+</style>
 
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
-
-        @media (max-width: 768px) {
-            .main-content {
-                flex-direction: column;
-            }
-        }
-    </style>
-
-    <!-- Main Content: Left Pane = List Organizations, Right Pane = Add Organization -->
-    <div class="main-content">
-        <!-- Left Pane: List Organizations with Ban/Deban Options -->
-        <div class="left-pane">
-            <h1>Organizations</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Industry</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for organization in organizations %}
-                    <tr>
-                        <td>{{ organization.name }}</td>
-                        <td>{{ organization.industry }}</td>
-                        <td>{{ "Banned" if organization.is_banned else "Active" }}</td>
-                        <td>
-                            {% if organization.is_banned %}
-                                <!-- Deban Form -->
-                                <form
-                                    action="/admin/orgs/deban/{{ organization.id }}"
-                                    method="post"
-                                    onsubmit="return confirm('Unban this organization?');"
-                                >
-                                    <button
-                                        type="submit"
-                                        class="btn add-btn"
-                                    >
-                                        Deban
-                                    </button>
-                                </form>
-                            {% else %}
-                                <!-- Ban Form -->
-                                <form
-                                    action="/admin/orgs/ban/{{ organization.id }}"
-                                    method="post"
-                                    onsubmit="return confirm('Are you sure you want to ban this organization?');"
-                                >
-                                    <button
-                                        type="submit"
-                                        class="btn delete-btn"
-                                    >
-                                        Ban
-                                    </button>
-                                </form>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Right Pane: Add Organization Form -->
-        <div class="right-pane">
-            <h1>Add Organization</h1>
-            <form action="{{ url_for('admin.add_organization') }}" method="post">
-                <label for="org-name">Name</label>
-                <input
-                    type="text"
-                    id="org-name"
-                    name="name"
-                    placeholder="Enter organization name"
-                    required
-                />
-
-                <label for="org-industry">Industry</label>
-                <input
-                    type="text"
-                    id="org-industry"
-                    name="industry"
-                    placeholder="Enter industry"
-                    required
-                />
-
-                <button type="submit" class="btn add-btn">
-                    Add Organization
-                </button>
+<!-- Main Content: Left Pane = List Organizations, Right Pane = Add Organization -->
+<div class="main-content">
+  <!-- Left Pane: List Organizations with Ban/Deban Options -->
+  <div class="left-pane">
+    <h1>Organizations</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Industry</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for organization in organizations %}
+        <tr>
+          <td>{{ organization.name }}</td>
+          <td>{{ organization.industry }}</td>
+          <td>{{ "Banned" if organization.is_banned else "Active" }}</td>
+          <td>
+            {% if organization.is_banned %}
+            <!-- Deban Form -->
+            <form
+              action="/admin/orgs/deban/{{ organization.id }}"
+              method="post"
+              onsubmit="return confirm('Unban this organization?');"
+            >
+              <button type="submit" class="btn add-btn">Deban</button>
             </form>
-        </div>
-    </div>
+            {% else %}
+            <!-- Ban Form -->
+            <form
+              action="/admin/orgs/ban/{{ organization.id }}"
+              method="post"
+              onsubmit="return confirm('Are you sure you want to ban this organization?');"
+            >
+              <button type="submit" class="btn delete-btn">Ban</button>
+            </form>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Right Pane: Add Organization Form -->
+  <div class="right-pane">
+    <h1>Add Organization</h1>
+    <form action="{{ url_for('admin.add_organization') }}" method="post">
+      <label for="org-name">Name</label>
+      <input
+        type="text"
+        id="org-name"
+        name="name"
+        placeholder="Enter organization name"
+        required
+      />
+
+      <label for="org-industry">Industry</label>
+      <input
+        type="text"
+        id="org-industry"
+        name="industry"
+        placeholder="Enter industry"
+        required
+      />
+
+      <button type="submit" class="btn add-btn">Add Organization</button>
+    </form>
+  </div>
+</div>
 {% endblock %}

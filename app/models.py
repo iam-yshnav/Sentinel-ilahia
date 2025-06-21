@@ -29,8 +29,8 @@ class Asset(db.Model):
     service_version = db.Column(db.String(50))
     organization_id = db.Column(db.Integer, db.ForeignKey('organizations.id'), nullable=False) 
     server_purpose = db.Column(db.String(50), nullable=False)
-    cpu_configuration = db.Column(db.Integer, nullable=False)  # Number of cores
-    ram_capacity = db.Column(db.Integer, nullable=False)  # RAM in GB
+    cpu_configuration = db.Column(db.Integer, nullable=False)  
+    ram_capacity = db.Column(db.Integer, nullable=False)  
     storage_configuration = db.Column(db.Text)
     network_configuration = db.Column(db.Text)
     security_protocols = db.Column(db.Text)
@@ -71,22 +71,16 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
-    token = db.Column(db.String(255), nullable=True)
+    token = db.Column(db.Integer, nullable=False, default=0) #update token field from string to int & set default to 0
     role = db.Column(db.String(50), default='normal')  # Roles: 'normal', 'company', 'admin'
     status = db.Column(db.String(20), default='pending')  # Status: 'pending', 'approved', 'revoked', 'banned'
-
-    # Personal Details (Common for both normal and company users)
     name = db.Column(db.String(120), nullable=True)
     salutation = db.Column(db.String(50), nullable=True)
-
-    # Company-Specific Details (Only for company users)
     organization_id = db.Column(db.Integer, db.ForeignKey('organizations.id'), nullable=True)
     company = db.Column(db.String(120), nullable=True)  # Only if organization_id is not provided
     designation = db.Column(db.String(120), nullable=True)
     team = db.Column(db.String(120), nullable=True)
     domain = db.Column(db.String(120), nullable=True)
-
-    # Timestamps
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def set_password(self, password):
@@ -113,8 +107,6 @@ class ThreatIntelligence(db.Model):
     threat_id = db.Column(db.Integer, db.ForeignKey('threat_reports.id'), nullable=False)
     state = db.Column(db.String(50), default="Triaged",nullable=False)  # e.g., 'triaged', 'mitigated'
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-
-    # Optional relationships for easier access from related models
     organization = db.relationship('Organization', backref=db.backref('threat_intelligence', lazy=True))
     asset = db.relationship('Asset', backref=db.backref('threat_intelligence', lazy=True))
     threat = db.relationship('ThreatReport', backref=db.backref('threat_intelligence', lazy=True))
