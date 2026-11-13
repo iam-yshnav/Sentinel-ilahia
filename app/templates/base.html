@@ -121,6 +121,7 @@
     </style>
 </head>
 <body>
+    {% include "_flash.html" %}
     <!-- Sidebar -->
     <div class="sidebar">
         <h2>Admin Panel</h2>
@@ -134,18 +135,6 @@
     <!-- Main Content -->
     <div class="main-content">
         <!-- Flash Messages -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <div class="flash-messages">
-                    {% for category, message in messages %}
-                        <div class="flash flash-{{ category }}">
-                            <span>{{ message }}</span>
-                            <button class="close-btn">&times;</button>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
 
         <!-- Dynamic Content -->
         {% block content %}{% endblock %}

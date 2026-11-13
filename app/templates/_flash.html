@@ -1,0 +1,52 @@
+{# Shared flash-message block. Include once per page, right after <body>.
+   Handles every category the backend uses: success, danger, error, warning, info. #}
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<style>
+  .flash-stack {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 2000;
+    max-width: min(420px, calc(100vw - 40px));
+  }
+  .flash-msg {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    border-left: 5px solid #138496;
+    background-color: #17a2b8;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+  }
+  .flash-msg-success { background-color: #28a745; border-left-color: #1e7e34; }
+  .flash-msg-danger,
+  .flash-msg-error { background-color: #dc3545; border-left-color: #a71d2a; }
+  .flash-msg-warning { background-color: #ffc107; border-left-color: #d39e00; color: #212529; }
+  .flash-msg-info { background-color: #17a2b8; border-left-color: #138496; }
+  .flash-msg-close {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+  }
+</style>
+<div class="flash-stack" role="status" aria-live="polite">
+  {% for category, message in messages %}
+  <div class="flash-msg flash-msg-{{ category }}">
+    <span>{{ message }}</span>
+    <button type="button" class="flash-msg-close" aria-label="Dismiss"
+            onclick="this.parentElement.remove()">&times;</button>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+{% endwith %}

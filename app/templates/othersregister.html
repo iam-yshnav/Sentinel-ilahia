@@ -25,6 +25,7 @@
 }
 </style>
 <body>
+    {% include "_flash.html" %}
     <div class="landing-navbar">
         <div class="landing-logo">
             <img src="{{ url_for('static', filename='uploads/sentinel-black.png') }}" alt="Sentinel Logo">
@@ -38,15 +39,6 @@
     </div>
 <!-- flah messgae -->
     <div class="flash-messages">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
 </div>
 
     <!-- Main Content -->

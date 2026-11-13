@@ -44,6 +44,7 @@ function togglePassword() {
     </script>
 </head>
 <body>
+    {% include "_flash.html" %}
 
 
     <div class="landing-navbar">
@@ -61,15 +62,6 @@ function togglePassword() {
     <!-- Main Content -->
     <main class="container">
         <!-- Flashed Messages Section -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <div class="flashed-messages">
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">{{ message }}</div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
 
         <div class="layout">
             <!-- Left Panel -->
