@@ -228,6 +228,7 @@
     </style>
   </head>
   <body>
+    {% include "_flash.html" %}
     <div class="landing-navbar">
       <div class="landing-logo">
         <img
@@ -239,14 +240,6 @@
       <div class="landing-nav-links">
         <a href="{{ url_for('main_bp.about_me') }}">Profile</a>
       </div>
-    </div>
-
-    <!-- Flash Messages -->
-    <div id="flash-messages">
-      {% with messages = get_flashed_messages(with_categories=true) %} {% if
-      messages %} {% for category, message in messages %}
-      <div class="flash-message flash-{{ category }}">{{ message }}</div>
-      {% endfor %} {% endif %} {% endwith %}
     </div>
 
     <div class="container">
