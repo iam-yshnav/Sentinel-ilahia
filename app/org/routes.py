@@ -4,6 +4,26 @@ from app.models import Organization, User, Asset
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.org import org_bp
 
+# Organization landing page: a glimpse of the organization and its assets
+@org_bp.route('/', methods=['GET'])
+@jwt_required()
+def org_home():
+    username = get_jwt_identity()
+    user = User.query.filter_by(username=username).first()
+
+    # Ensure the user is a company user
+    if not user or user.role != 'company':
+        flash("Unauthorized access. Only company users can access this page.", "danger")
+        return redirect(url_for('main_bp.home'))
+
+    org = Organization.query.get(user.organization_id) if user.organization_id else None
+    if not org:
+        flash("Organization not found.", "danger")
+        return redirect(url_for('main_bp.home'))
+
+    assets = Asset.query.filter_by(organization_id=org.id).order_by(Asset.server_name).all()
+    return render_template('org_assets.html', org=org, assets=assets)
+
 # Render the add_asset.html page
 @org_bp.route('/asset', methods=['GET'])
 @jwt_required()
@@ -48,7 +68,7 @@ def create_asset():
         ip_address=data['ip_address'],
         service_name=data.get('service_name', ''),
         service_version=data.get('service_version', ''),
-        organization_id=data['organization_id'],
+        organization_id=org.id,  # always the logged-in user's organization, never the client-supplied id
         server_purpose=data['server_purpose'],
         cpu_configuration=data['cpu_configuration'],
         ram_capacity=data['ram_capacity'],
