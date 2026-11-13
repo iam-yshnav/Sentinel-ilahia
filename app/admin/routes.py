@@ -67,9 +67,7 @@ def add_organization():
             return redirect(url_for('admin.add_organization'))
         
         # Create and add the new organization
-        new_org = Organization(name=name, industry=industry)
-        # Assuming the Organization model has an "is_banned" field; initialize as not banned.
-        new_org.is_banned = False
+        new_org = Organization(name=name, industry=industry, is_banned=False)
         
         try:
             db.session.add(new_org)
@@ -85,14 +83,13 @@ def add_organization():
     return render_template('admin_orgnizations.html', organizations=organizations)
 
 
-# TODO : Check with the ban stuff 
 @admin_bp.route('/orgs/ban/<int:org_id>', methods=['POST'])
 def ban_organization(org_id):
     organization = Organization.query.get_or_404(org_id)
-    if getattr(organization, 'is_banned', "1"):
+    if organization.is_banned:
         flash("Organization is already banned.", "warning")
     else:
-        organization.is_banned = "1"
+        organization.is_banned = True
         try:
             db.session.commit()
             flash("Organization banned successfully.", "success")
@@ -106,7 +103,7 @@ def ban_organization(org_id):
 @admin_bp.route('/orgs/deban/<int:org_id>', methods=['POST'])
 def deban_organization(org_id):
     organization = Organization.query.get_or_404(org_id)
-    if not getattr(organization, 'is_banned', False):
+    if not organization.is_banned:
         flash("Organization is not banned.", "warning")
     else:
         organization.is_banned = False
