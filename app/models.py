@@ -4,13 +4,36 @@ from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
 
 
+class BanFlag(db.TypeDecorator):
+    """Boolean flag stored in the existing organizations.is_banned text column.
+
+    The column was created as a string and holds "0", "1" or NULL. Read as a
+    plain string, "0" is truthy, which made every organization show as banned.
+    This type always hands the app a real bool and always writes 0 or 1, so it
+    works with existing databases without a schema migration.
+    """
+    impl = db.Integer
+    cache_ok = True
+
+    def process_bind_param(self, value, dialect):
+        return int(self._to_bool(value))
+
+    def process_result_value(self, value, dialect):
+        return self._to_bool(value)
+
+    @staticmethod
+    def _to_bool(value):
+        if isinstance(value, str):
+            return value.strip().lower() in ('1', 'true', 't', 'yes')
+        return bool(value)
+
 class Organization(db.Model):
     __tablename__ = 'organizations'
     
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150), unique=True, nullable=False)
     industry = db.Column(db.String(100), nullable=True)
-    is_banned = db.Column(db.String(50), nullable=True)
+    is_banned = db.Column(BanFlag, nullable=True, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     # Relationships
